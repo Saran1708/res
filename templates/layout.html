@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="" />
+  <link rel="icon" href="{{ url_for('static', filename='images/title.png') }}" >
+  <title>{% block title %}Researcher Profile Dashboard{% endblock %}</title>
+
+  <!-- Bootstrap CSS -->
+  <link href="{{ url_for('static', filename='assets/dist/css/bootstrap.min.css') }}" rel="stylesheet" />
+
+  <!-- Font Awesome for icons -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.0/font/bootstrap-icons.min.css"
+    rel="stylesheet">
+
+
+
+  <!-- Custom CSS -->
+  <link href="{{ url_for('static', filename='css/headers_footer.css') }}" rel="stylesheet" />
+  <style>
+    @media (min-width: 992px) { /* Adjust this breakpoint as needed for desktop view */
+        .college-title {
+            letter-spacing: 1px;
+        }
+        .college-details {
+            letter-spacing: 0.5px;
+        }
+    }
+</style>
+  <!-- External Stylesheet -->
+  {% block extra_styles %}
+  <!-- Default stylesheet here -->
+  {% endblock %}
+
+  <!-- JavaScript for color modes -->
+  {% block extra_scripts %}
+
+  <!-- Default JavaScript file here -->
+
+
+  {% endblock %}
+
+
+
+
+</head>
+
+<body>
+  <header>
+    <div class="background-color">
+      <div class="container d-flex flex-wrap align-items-center justify-content-between header-content">
+        <!-- Logo Section -->
+        <img src="{{ url_for('static', filename='images/mcc_logo.png') }}" alt="MCC Logo" class="header-logo" />
+  
+        <!-- Title Section -->
+        <div class="head text-center">
+          <h2 class="college-title" >MADRAS CHRISTIAN COLLEGE (AUTONOMOUS)</h2>
+          <h6 class="college-details" >DEANERY - RESEARCH AND DEVELOPMENT</h6>
+        </div>
+  
+        <!-- User Dropdown Section -->
+        <div class="dropdown text-end">
+          <a href="#" class="d-block link-body-emphasis text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+            <span class="bi bi-person-circle login-img"></span>
+          </a>
+          <ul class="dropdown-menu text-small">
+            {% block signin_status %}
+            <li>
+              <form action="{{ url_for('login') }}" method="post" class="login-form">
+                <button type="submit" class="dropdown-item login-button">LOGIN</button>
+              </form>
+            </li>
+            {% endblock %}
+            <li>
+              <form action="{{ url_for('dashboard') }}" method="get" class="login-form">
+                <button type="submit" class="dropdown-item login-button">HOME</button>
+              </form>
+            </li>
+            <li>
+              <form action="{{ url_for('dashboard') }}#search2" method="get" class="login-form">
+                <button type="submit" class="dropdown-item login-button">SEARCH</button>
+              </form>
+            </li>
+            <li class="dropdown-submenu">
+              <a href="#" class="dropdown-item dropdown-toggle2">THEME</a>
+              <ul class="dropdown-menu dropdown-menu-end shadow">
+                <li>
+                  <button type="button" class="dropdown-item" data-bs-theme-value="light">
+                    <i class="bi bi-sun me-2"></i> Light
+                  </button>
+                </li>
+                <li>
+                  <button type="button" class="dropdown-item" data-bs-theme-value="dark">
+                    <i class="bi bi-moon me-2"></i> Dark
+                  </button>
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </header>
+  
+  <!-- Banner Section - Below the Header -->
+  <div class="banner">
+    <picture>
+        <!-- Mobile image -->
+        <source media="(max-width: 768px)" srcset="{{ url_for('static', filename='images/mccc.png') }}">
+        <!-- Desktop image -->
+        <img src="{{ url_for('static', filename='images/banner-06.png') }}" alt="banner" class="banner-img">
+    </picture>
+    <div class="banner-text">Researcher Profile</div>
+</div>
+
+  
+  
+  <main>
+    {% block content %}
+    <!-- Page content will be inserted here -->
+    {% endblock %}
+  </main>
+
+  <!-- Footer Section -->
+  <footer class="px-3 py-2 border-top background-color2">
+    <div class="container">
+      <p class="text-center text-bold">
+        &copy; 2024 Madras Christian College. All Rights Reserved.
+      </p>
+      <p class="text-center text-small">
+        Designed by Deanery - R&D | Developed by MCC - MRF Innovation Park
+      </p>
+    </div>
+  </footer>
+
+  <!-- Bootstrap Bundle JS (includes Popper.js) -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const dropdownSubmenus = document.querySelectorAll('.dropdown-submenu');
+
+      dropdownSubmenus.forEach(function (submenu) {
+        submenu.addEventListener('click', function (e) {
+          e.preventDefault();
+          e.stopPropagation(); // Prevent the dropdown from closing
+
+          // Toggle the 'show' class on click
+          this.classList.toggle('show');
+        });
+      });
+    });
+  </script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const themeKey = 'selected-theme';
+      const htmlElement = document.documentElement;
+
+      // Check if a theme is already stored in local storage
+      const storedTheme = localStorage.getItem(themeKey);
+      if (storedTheme) {
+        htmlElement.setAttribute('data-bs-theme', storedTheme);
+      } else {
+        // Set the initial theme to light mode if no preference is stored
+        htmlElement.setAttribute('data-bs-theme', 'light');
+      }
+
+      // Add event listeners to theme buttons
+      const themeButtons = document.querySelectorAll('[data-bs-theme-value]');
+      themeButtons.forEach(function (button) {
+        button.addEventListener('click', function () {
+          const selectedTheme = this.getAttribute('data-bs-theme-value');
+          htmlElement.setAttribute('data-bs-theme', selectedTheme);
+          localStorage.setItem(themeKey, selectedTheme); // Store the selected theme in local storage
+        });
+      });
+    });
+  </script>
+</body>
+
+</html>

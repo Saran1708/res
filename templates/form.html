@@ -1,0 +1,899 @@
+{% extends 'layout.html' %}
+
+{% block title %}Staff Details{% endblock %}
+
+{% block extra_styles %}
+<!-- Link to your external stylesheet -->
+<link rel="stylesheet" href="{{ url_for('static', filename='css/form.css') }}">
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/4.5.2/css/bootstrap.min.css">
+
+
+<!-- Include Cropper.js CSS -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css">
+
+<style>
+    .modal-body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 70vh;
+        /* Increase modal height */
+        padding: 0;
+        /* Remove padding for better image alignment */
+    }
+
+    #crop-image {
+        max-width: 100%;
+        /* Ensure image doesn't overflow */
+        max-height: 100%;
+        /* Ensure image doesn't overflow */
+        object-fit: contain;
+        /* Maintain aspect ratio */
+    }
+
+    .modal-footer {
+        justify-content: space-between;
+        /* Align buttons to the left and right */
+    }
+</style>
+
+{% endblock %}
+
+{% block content %}
+
+
+
+<div class="notification hide" id="notification">
+    <div class="notification__icon" id="notification-icon">
+        <!-- Icons will be dynamically inserted here -->
+    </div>
+    <div class="notification__title" id="notification-title"></div>
+    <div class="notification__close" id="notification-close">
+        <span class="material-icons">close</span>
+    </div>
+</div>
+<div class="content">
+    <div class="login-container">
+        <h4>Personal Information</h4>
+        <form method="POST" enctype="multipart/form-data">
+            <!-- Personal Information Section -->
+            <div class="form-section">
+                <div class="form-group">
+
+                    <select name="title2" id="title2" class="form-control" required data-toggle="tooltip"
+                        data-placement="top" title2="Select your title">
+                        <option value="" disabled selected>Select your title</option>
+                        <option value="Dr">Dr</option>
+                        <option value="Mr">Mr</option>
+                        <option value="Ms">Ms</option>
+                        <option value="Mrs">Mrs</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+
+                    <input type="text" name="name" id="name" class="form-control" placeholder="Full Name (Without Title)" required
+                        data-toggle="tooltip" data-placement="top"
+                        title="Enter your full name as it appears on official documents.">
+                </div>
+
+                <div class="form-group">
+                    <select name="department" class="form-control" required data-toggle="tooltip" data-placement="top"
+                        title="Select your Department.">
+                        <option value="" disabled selected>Select Department</option>
+                        <optgroup label="Aided Stream">
+                            <option value="English - Aided">English</option>
+                            <option value="Tamil - Aided">Tamil</option>
+                            <option value="Languages - Aided">Languages</option>
+                            <option value="History - Aided">History</option>
+                            <option value="Political Science - Aided">Political Science</option>
+                            <option value="Public Administration - Aided">Public Administration</option>
+                            <option value="Economics - Aided">Economics</option>
+                            <option value="Philosophy - Aided">Philosophy</option>
+                            <option value="Commerce - Aided">Commerce</option>
+                            <option value="Social Work - Aided">Social Work</option>
+                            <option value="Mathematics - Aided">Mathematics</option>
+                            <option value="Statistics - Aided">Statistics</option>
+                            <option value="Physics - Aided">Physics</option>
+                            <option value="Chemistry - Aided">Chemistry</option>
+                            <option value="Botany - Aided">Botany</option>
+                            <option value="Zoology - Aided">Zoology</option>
+                            <option value="Physical Education - Aided">Physical Education</option>
+                        </optgroup>
+                        <optgroup label="Self-Financed Stream">
+                            <option value="English - SFS">English</option>
+                            <option value="Tamil - SFS">Tamil</option>
+                            <option value="Languages - SFS">Languages</option>
+                            <option value="Journalism - SFS">Journalism</option>
+                            <option value="Social Work - SFS">Social Work</option>
+                            <option value="Commerce - SFS">Commerce</option>
+                            <option value="Business Administration - SFS">Business Administration</option>
+                            <option value="Communication - SFS">Communication</option>
+                            <option value="Geography - SFS">Geography</option>
+                            <option value="Tourism Studies - SFS">Tourism Studies</option>
+                            <option value="Mathematics - SFS">Mathematics</option>
+                            <option value="Physics - SFS">Physics</option>
+                            <option value="Chemistry - SFS">Chemistry</option>
+                            <option value="Microbiology - SFS">Microbiology</option>
+                            <option value="Computer Application (BCA) - SFS">Computer Application (BCA)</option>
+                            <option value="Computer Science (B.Sc) - SFS">Computer Science (B.Sc)</option>
+                            <option value="Computer Science (MCA) - SFS">Computer Science (MCA)</option>
+                            <option value="Visual Communication - SFS">Visual Communication</option>
+                            <option value="Physical Education, Health Education and Sports - SFS">Physical Education,
+                                Health Education and Sports</option>
+                            <option value="Psychology - SFS">Psychology</option>
+                            <option value="Data Science - SFS">Data Science</option>
+                        </optgroup>
+                        <optgroup label="Units">
+                            <option value="MCC - MRF Innovation Park">MCC - MRF Innovation Park</option>
+                        </optgroup>
+                    </select>
+
+
+                </div>
+                <div class="form-group">
+                   
+                    <select id="designation" name="Title" class="form-control" required data-toggle="tooltip" data-placement="top" title="Select your Designation.">
+                        <option value="" disabled selected>Select your Designation.</option>
+                        <option value="Assistant Professor">Assistant Professor</option>
+                        <option value="Associate Professor">Associate Professor</option>
+                        <option value="Others">Others</option>
+                    </select>
+                </div>
+                
+                <div class="form-group" id="other-designation-group" style="display: none;">
+                    <input type="text" id="other-designation" name="OtherTitle" class="form-control" placeholder="Enter your Designation (Eg. Head of the Department)" data-toggle="tooltip" data-placement="top" title="Specify your Designation.">
+                </div>
+                
+                <script>
+                    const designationDropdown = document.getElementById('designation');
+                    const otherDesignationGroup = document.getElementById('other-designation-group');
+                    const otherDesignationInput = document.getElementById('other-designation');
+                
+                    designationDropdown.addEventListener('change', function () {
+                        if (this.value === 'Others') {
+                            otherDesignationGroup.style.display = 'block';
+                            otherDesignationInput.required = true;
+                        } else {
+                            otherDesignationGroup.style.display = 'none';
+                            otherDesignationInput.required = false;
+                        }
+                    });
+                </script>
+                
+                <div class="form-group">
+
+                    <input type="text" id="institution" name="institution" value="Madras Christian College" readonly
+                        class="form-control">
+                </div>
+
+                <div class="form-group">
+                   
+                    <select name="department_order" id="departmentOrder" class="form-control" required
+                        data-toggle="tooltip" data-placement="top" title="Choose your order in the department according to the attendance register.">
+                        <option value="" disabled selected>Choose your order in the department according to the attendance register.</option>
+                        {% for i in range(1, 21) %}
+                        <option value="{{ i }}">{{ i }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                
+
+                <div class="form-group">
+                    <input type="email" id="email" name="email" class="form-control" placeholder="Email" required
+                        value="{{ email }}" readonly>
+                </div>
+
+                <!-- New section for Alternative Email -->
+
+
+                <div class="form-group">
+                    <input type="email" name="alternative_email" class="form-control" placeholder="Alternative Email"
+                        required data-toggle="tooltip" data-placement="top"
+                        title="Enter your alternative email address.">
+                </div>
+
+
+                <div class="form-group">
+                    <input type="tel" name="phone" class="form-control" placeholder="Phone" required
+                        data-toggle="tooltip" data-placement="top" title="Enter your phone number.">
+                </div>
+
+                
+
+                <div class="form-group">
+                    <input type="text" name="address" class="form-control" placeholder="Address" required
+                        data-toggle="tooltip" data-placement="top" title="Enter your residential address.">
+                </div>
+                <div class="form-group">
+                    <input type="url" name="website" class="form-control" placeholder="Website" data-toggle="tooltip"
+                        data-placement="top"
+                        title="Enter your personal or professional website URL (https://example.com) .">
+                </div>
+
+                <!-- File Input -->
+                <div class="form-group">
+                    <input type="file" name="profile_picture" id="profile_picture" class="form-control" required
+                        accept="image/*" data-toggle="tooltip" data-placement="top" title="Upload a profile picture."
+                        onchange="previewImage(event)"></br>
+                    <button type="button" id="remove-picture" class="btn btn-danger remove-button"
+                        style="display: none;" onclick="removeImage()">Remove Profile Picture</button>
+                </div>
+
+                <!-- Modal for Image Cropping -->
+                <div class="modal fade" id="cropModal" tabindex="-1" aria-labelledby="cropModalLabel"
+                    aria-hidden="true">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="cropModalLabel">Crop Image</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <img id="image" src="" alt="Image Preview">
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                <button type="button" id="crop-button" class="btn btn-primary"
+                                    onclick="cropImage()">Crop Image</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+                <div class="form-group">
+                    <textarea name="research_areas" class="form-control" placeholder="Research Areas" rows="5"
+                        data-toggle="tooltip" data-placement="top"
+                        title="Enter your research areas. Separate each area with a new line."></textarea>
+                </div>
+            </div><br>
+            <!-- Education Section -->
+            <div class="form-section">
+                <h4>Education</h4>
+                <div id="education-section" class="dynamic-section"></div>
+                <button type="button" class="btn btn-secondary mt-2" id="add-education">Add Education</button>
+            </div><br>
+
+            <!-- Career Highlights Section -->
+            <!-- Career Highlights Section -->
+            <div class="form-section">
+                <h4>Career Highlights</h4>
+                <div class="form-group">
+                    <textarea name="career_highlights" class="form-control" placeholder="Career Highlights" rows="5"
+                        data-toggle="tooltip" data-placement="top"
+                        title="Enter your career highlights. Separate each highlight with a new line."
+                        id="careerHighlights" oninput="updateCount('careerHighlights', 'careerCount', 500);"></textarea>
+                    <div id="careerCount" class="char-count">0/500</div>
+                    <div id="careerError" class="error-message" style="color: red; display: none;">Exceeded character
+                        limit!</div>
+                </div>
+            </div><br>
+
+            <!-- Research Career Section -->
+            <div class="form-section">
+                <h4>Research Career</h4>
+                <div class="form-group">
+                    <textarea name="research_career" class="form-control" placeholder="Research Career" rows="5"
+                        data-toggle="tooltip" data-placement="top"
+                        title="Enter your research career details. Separate each detail with a new line."
+                        id="researchCareer" oninput="updateCount('researchCareer', 'researchCount', 500);"></textarea>
+                    <div id="researchCount" class="char-count">0/500</div>
+                    <div id="researchError" class="error-message" style="color: red; display: none;">Exceeded character
+                        limit!</div>
+                </div>
+            </div><br>
+
+
+            <!-- New section for Consultancy -->
+            <div class="form-section">
+                <h4>Areas of Consultancy</h4>
+                <div class="form-group">
+                    <textarea name="consultancy" class="form-control" placeholder="Consultancy details" rows="5"
+                        data-toggle="tooltip" data-placement="top"
+                        title="Enter your consultancy details. Separate each point with a new line."></textarea>
+                </div>
+            </div><br>
+
+            <div class="form-section">
+                <h4>Areas of Inter-Disciplinary collaboration</h4>
+                <div class="form-group">
+                    <textarea name="collab" class="form-control" placeholder="Inter-Disciplinary collaboration" rows="5"
+                        data-toggle="tooltip" data-placement="top"
+                        title="Enter your Inter-Disciplinary collaboration. Separate each highlight with a new line."></textarea>
+                </div>
+            </div><br>
+
+            <div class="form-section">
+                <h4>Research Supervisor</h4>
+
+                <!-- Radio buttons for Yes/No selection -->
+                <div class="form-group">
+                    <label>
+                        <input type="radio" name="research_supervisor" id="supervisor-yes" value="yes"> Yes
+                    </label>
+                    <label class="ml-3">
+                        <input type="radio" name="research_supervisor" id="supervisor-no" value="no"> No
+                    </label>
+                </div>
+            </div>
+
+            <!-- The PhD Scholars section (initially hidden) -->
+            <div id="phd-section" style="display: none;">
+                <h4>Details of PhD Scholars</h4>
+
+                <!-- Input fields for number of PhD scholars -->
+                <div class="form-group">
+                    <input type="number" name="phd_scholars_produced" class="form-control mt-2"
+                        placeholder="No. of PhD Scholars Produced">
+                    <input type="number" name="phd_scholars_registered" class="form-control mt-2"
+                        placeholder="No. of PhD Scholars Currently Registered">
+                </div>
+                <br>
+
+                <!-- Dynamic section for PhD Scholar details -->
+                <div id="phd-scholars-section" class="dynamic-section"></div>
+                <button type="button" class="btn btn-secondary mt-2" id="add-phd-scholar">Add PhD Scholar
+                    Details</button>
+            </div>
+            <br>
+
+
+
+
+            <!-- Administrative Positions Section -->
+            <div class="form-section">
+                <h4>Administrative Positions in College</h4>
+                <div id="admin-positions-section" class="dynamic-section"></div>
+                <button type="button" class="btn btn-secondary mt-2" id="add-admin-position">Add Administrative
+                    Position</button>
+            </div><br>
+
+            <!-- Honorary Position Section -->
+            <div class="form-section">
+                <h4>Other Honorary Position</h4>
+                <div id="honorary-position-section" class="dynamic-section"></div>
+                <button type="button" class="btn btn-secondary mt-2" id="add-honorary-position">Add Honorary
+                    Position</button>
+            </div><br>
+
+            <!-- Conference Attended Section -->
+            <div class="form-section">
+                <h4>Conferences Attended</h4>
+                <div id="conference-attended-section" class="dynamic-section"></div>
+                <button type="button" class="btn btn-secondary mt-2" id="add-conference-attended">Add Conference
+                    Attended</button>
+            </div><br>
+
+            <!-- Resource Person Section -->
+            <div class="form-section">
+                <h4>Resource Person</h4>
+                <div id="resource-person-section" class="dynamic-section"></div>
+                <button type="button" class="btn btn-secondary mt-2" id="add-resource-person">Add Resource
+                    Person</button>
+            </div><br>
+
+            <!-- Research IDs Section -->
+            <div class="form-section">
+                <h4>Research IDs</h4>
+                <div id="research-ids-section" class="dynamic-section"></div>
+                <button type="button" class="btn btn-secondary mt-2" id="add-research-id">Add Research ID</button>
+            </div><br>
+
+
+            <!-- Funding Section -->
+            <div class="form-section">
+                <h4>Government / Non Government Funding for Research Projects</h4>
+                <div id="funding-section" class="dynamic-section"></div>
+                <button type="button" class="btn btn-secondary mt-2" id="add-funding">Add Funding</button>
+            </div><br>
+
+            <div class="form-section">
+                <h4> Research Publications</h4>
+                <div id="publications-section" class="dynamic-section"></div>
+                <button type="button" class="btn btn-secondary mt-2" id="add-publication">Add Publication</button>
+            </div>
+            
+
+
+            <!-- Submit Button -->
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary" onclick="return validateForm();">Submit</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- jQuery and Bootstrap JS for tooltips and dynamic content -->
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+<!-- JavaScript for Image Cropping -->
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
+<script>
+    let cropper;
+
+    function previewImage(event) {
+        const image = document.getElementById('image');
+        const cropModal = new bootstrap.Modal(document.getElementById('cropModal'));
+
+        const file = event.target.files[0];
+        const removeButton = document.getElementById('remove-picture');
+
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                image.src = e.target.result;
+
+                // Show the modal first
+                cropModal.show();
+            }
+            reader.readAsDataURL(file);
+            removeButton.style.display = 'inline-block'; // Show remove button
+        }
+
+        // Ensure cropper is initialized only after the modal is shown
+        document.getElementById('cropModal').addEventListener('shown.bs.modal', function () {
+            // Initialize Cropper.js
+            if (cropper) {
+                cropper.destroy();
+            }
+            cropper = new Cropper(image, {
+                aspectRatio: 1, // Set to 1:1 for square crop
+                viewMode: 1,
+                autoCropArea: 1, // Ensure the cropped area takes full space
+                scalable: true, // Allow scaling of the image
+                zoomable: true, // Allow zooming in on the image
+                rotatable: true, // Allow rotating of the image
+            });
+        });
+    }
+
+    function cropImage() {
+        const canvas = cropper.getCroppedCanvas({
+            width: 400, // Set the cropped width
+            height: 400, // Set the cropped height
+            imageSmoothingEnabled: true,
+            imageSmoothingQuality: 'high',
+        });
+
+        canvas.toBlob(function (blob) {
+            const file = new File([blob], 'cropped_image.png', {
+                type: 'image/png',
+                lastModified: Date.now()
+            });
+            const dataTransfer = new DataTransfer();
+            dataTransfer.items.add(file);
+            document.getElementById('profile_picture').files = dataTransfer.files; // Add cropped image to file input
+
+            // Hide the modal
+            const cropModal = bootstrap.Modal.getInstance(document.getElementById('cropModal'));
+            cropModal.hide();
+        });
+    }
+
+    function removeImage() {
+        const profilePictureInput = document.getElementById('profile_picture');
+        const image = document.getElementById('image');
+        const removeButton = document.getElementById('remove-picture');
+
+        // Clear the file input
+        profilePictureInput.value = '';
+
+        // Reset the image preview
+        image.src = '';
+
+        // Hide the remove button
+        removeButton.style.display = 'none';
+    }
+</script>
+
+<script>
+    function showNotification(message, type = 'error') {
+        const notification = document.getElementById('notification');
+        const notificationTitle = document.getElementById('notification-title');
+        const notificationIcon = document.getElementById('notification-icon');
+
+        // Reset classes before applying new ones
+        notification.className = 'notification hide'; // Reset class list to hide the notification first
+        notificationTitle.textContent = message;
+
+        // Clear any existing icon
+        notificationIcon.innerHTML = '';
+
+        // Insert the appropriate icon based on the type
+        if (type === 'success') {
+            notificationIcon.innerHTML = `
+            <span class="material-icons" style="color: #155724;">check_circle</span>`;
+        } else if (type === 'error') {
+            notificationIcon.innerHTML = `
+            <span class="material-icons" style="color: #721c24;">error</span>`;
+        }
+
+        // Add the type-specific class
+        notification.classList.add(type);
+
+        // Make the notification visible
+        notification.classList.remove('hide');
+        notification.classList.add('show');
+
+        setTimeout(() => {
+            // Start hiding the notification
+            notification.classList.remove('show');
+            notification.classList.add('hide');
+
+            setTimeout(() => {
+                notification.style.display = 'none'; // Hide the notification after animation
+            }, 500); // Delay to match the transition duration
+        }, 5000); // Hide after 5 seconds
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        // Parse flashed messages from Flask
+        const messages = JSON.parse('{{ get_flashed_messages(with_categories=True) | tojson | safe }}');
+
+        // Check if there are any messages to display
+        if (messages.length > 0) {
+            messages.forEach(msg => {
+                showNotification(msg[1], msg[0]); // Show each message with its type
+            });
+        } else {
+            const notification = document.getElementById('notification');
+            notification.style.display = 'none'; // Ensure hidden if no messages
+        }
+    });
+
+    // Handle close button click to manually hide notification
+    document.getElementById('notification-close').addEventListener('click', () => {
+        const notification = document.getElementById('notification');
+        notification.classList.remove('show');
+        notification.classList.add('hide');
+
+        setTimeout(() => {
+            notification.style.display = 'none'; // Hide the notification after animation
+        }, 500); // Delay to match the transition duration
+    });
+
+</script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const emailInput = document.getElementById('email');
+        const emailHelp = document.getElementById('emailHelp');
+
+        emailInput.addEventListener('input', function () {
+            const emailPattern = /^[a-zA-Z0-9._%+-]+@mcc\.edu\.in$/;
+            if (emailInput.value && !emailPattern.test(emailInput.value)) {
+                emailHelp.style.display = 'block'; // Show the message
+            } else {
+                emailHelp.style.display = 'none'; // Hide the message
+            }
+        });
+    });
+</script>
+<script>
+    $(function () {
+        // Initialize tooltips
+        $('[data-toggle="tooltip"]').tooltip();
+
+        // Function to handle adding and removing dynamic fields
+        function addDynamicField(buttonId, sectionId, fieldHtml) {
+            $(buttonId).click(function () {
+                const section = $(sectionId);
+                const index = section.children('.form-group').length + 1;
+                section.append(fieldHtml(index)).show();
+            });
+
+            $(sectionId).on('click', '.remove-item', function () {
+                $(this).closest('.form-group').remove();
+                if ($(sectionId).children('.form-group').length === 0) {
+                    $(sectionId).hide(); // Hide section if no fields are left
+                }
+            });
+        }
+
+        // Add dynamic fields for Honorary Position
+        addDynamicField('#add-honorary-position', '#honorary-position-section', function (index) {
+            return `
+    <div class="form-group">
+        <input type="text" name="honorary_position_title_${index}" class="form-control" placeholder="Position" required>
+        <input type="number" name="honorary_position_year_${index}" class="form-control mt-2" placeholder="Year" required>
+        <button type="button" class="btn btn-danger remove-item mt-2">Remove</button>
+    </div>
+    `;
+        });
+
+        // Add dynamic fields for Conference Attended
+        addDynamicField('#add-conference-attended', '#conference-attended-section', function (index) {
+            return `
+    <div class="form-group">
+        <input type="month" name="conference_year_${index}"  class="form-control" value="2024-01" required>
+        
+        <select name="conference_type_${index}" class="form-control mt-2" required>
+            <option value="">Select</option>
+            <option value="National">National</option>
+            <option value="International">International</option>
+        </select>
+        <input type="text" name="title_of_paper_${index}" class="form-control mt-2" placeholder="Title of the Research Paper Presented" required>
+        <input type="text" name="conference_details_${index}" class="form-control mt-2" placeholder="Conference Details" required>
+        <input type="text" name="conference_isbn_${index}" class="form-control mt-2" placeholder="ISBN of Conference Proceedings" required>
+        <button type="button" class="btn btn-danger remove-item mt-2">Remove</button>
+    </div>
+    `;
+        });
+
+       // Add dynamic fields for Resource Person
+addDynamicField('#add-resource-person', '#resource-person-section', function (index) {
+    return `
+    <div class="form-group">
+        
+        <input type="month" name="resource_person_date_${index}" id="resource_person_date_${index}" class="form-control" value="2024-01" required>
+        <input type="text" name="resource_person_topic_${index}" class="form-control mt-2" placeholder="Topic of Lecture" required>
+        <input type="text" name="resource_person_department_${index}" class="form-control mt-2" placeholder="Name of Department/Institution" required>
+        <button type="button" class="btn btn-danger remove-item mt-2">Remove</button>
+    </div>
+    `;
+});
+
+        addDynamicField('#add-admin-position', '#admin-positions-section', function (index) {
+            return `
+        <div class="form-group">
+            <input type="text" name="admin_position_${index}" class="form-control" placeholder="Position" required>
+            <input type="number" name="admin_year1_${index}" class="form-control mt-2" placeholder="Year (From)" required>
+            <input type="text" name="admin_year2_${index}" class="form-control mt-2" placeholder="Year (To) - type 'Current' if still in role" required>
+            <button type="button" class="btn btn-danger remove-item mt-2">Remove</button>
+        </div>
+        `;
+        });
+
+        // Add dynamic fields with proper index handling
+        addDynamicField('#add-research-id', '#research-ids-section', function (index) {
+            return `
+            <div class="form-group">
+                <input type="text" name="research_ids_title_${index}" class="form-control" placeholder="Title" required>
+                <input type="url" name="research_ids_id_${index}" class="form-control mt-2" placeholder="Link">
+                <button type="button" class="btn btn-danger remove-item mt-2">Remove</button>
+            </div>
+        `;
+        });
+
+        addDynamicField('#add-education', '#education-section', function (index) {
+            return `
+            <div class="form-group">
+                <input type="text" name="education_degree_${index}" class="form-control" placeholder="Degree" required>
+                <input type="text" name="education_college_${index}" class="form-control mt-2" placeholder="College" required>
+                <input type="number" name="education_duration_${index}" class="form-control mt-2" placeholder="Year of Completion"required>
+                <button type="button" class="btn btn-danger remove-item mt-2">Remove</button>
+            </div>
+        `;
+        });
+
+        addDynamicField('#add-funding', '#funding-section', function (index) {
+            return `
+        <div class="form-group funding-item">
+            <input type="text" name="project_title_${index}" class="form-control" placeholder="Title of the Project" required>
+            <input type="text" name="funding_agency_${index}" class="form-control mt-2" placeholder="Name of the Funding Agency" required>
+            <input type="month" name="funding_year_${index}" class="form-control" value="2024-01" required>
+            
+            <input type="number" name="funding_amount_${index}" class="form-control mt-2" placeholder="Amount" required>
+
+            <!-- New dropdown for status -->
+            <select name="funding_status_${index}" class="form-control mt-2" required>
+                <option value="" selected>Select Status</option>
+                <option value="completed">Completed</option>
+                <option value="ongoing">Ongoing</option>
+            </select>
+
+            <button type="button" class="btn btn-danger remove-item mt-2">Remove</button>
+        </div>
+    `;
+        });
+
+
+
+
+    });
+
+
+
+</script>
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        let publicationIndex = 0; // Track the index of publications
+
+        // Add event listener for adding a new publication
+        document.getElementById('add-publication').addEventListener('click', function () {
+            addPublicationField(publicationIndex); // Add a new publication field
+            publicationIndex++; // Increment the index for the next publication
+        });
+
+        // Function to add a new publication field
+        function addPublicationField(index) {
+            const publicationsSection = document.getElementById('publications-section');
+
+            const publicationDiv = document.createElement('div');
+            publicationDiv.classList.add('form-group', 'publication-item');
+            publicationDiv.setAttribute('data-index', index);
+            publicationDiv.innerHTML = `
+                <input type="month" name="publications_date_${index}" class="form-control mt-2" value="2024-01" required>
+
+                <select name="publications_type_${index}" class="form-control mt-2 publication-type" required>
+                    <option value="" selected>Select Publication Type</option>
+                    <option value="Journal article">Journal article</option>
+                    <option value="Conference paper">Conference paper</option>
+                    <option value="Book chapter">Book chapter</option>
+                    <option value="Book">Book</option>
+                    <option value="Others">Others</option>
+                </select>
+                <div class="form-group mt-2 other-publication-type" style="display: none;">
+                    <input type="text" name="other_publications_type_${index}" class="form-control" placeholder="Specify Publication Type">
+                </div>
+                <input type="text" name="publications_title_${index}" class="form-control mt-2" placeholder="Publication Title" required>
+                <input type="url" name="publications_link_${index}" class="form-control mt-2" placeholder="Publication Link">
+                <button type="button" class="btn btn-primary move-up mt-2">Move Up</button>
+                <button type="button" class="btn btn-primary move-down mt-2">Move Down</button>
+                <button type="button" class="btn btn-danger remove-item mt-2">Remove</button>
+            `;
+
+            publicationsSection.appendChild(publicationDiv);
+
+            // Add event listener for dropdown to toggle "Others" textbox
+            const dropdown = publicationDiv.querySelector('.publication-type');
+            const otherTypeDiv = publicationDiv.querySelector('.other-publication-type');
+
+            dropdown.addEventListener('change', function () {
+                if (this.value === 'Others') {
+                    otherTypeDiv.style.display = 'block';
+                    otherTypeDiv.querySelector('input').required = true;
+                } else {
+                    otherTypeDiv.style.display = 'none';
+                    otherTypeDiv.querySelector('input').required = false;
+                }
+            });
+
+            // Attach event listeners to the new buttons
+            publicationDiv.querySelector('.move-up').addEventListener('click', function () {
+                movePublication(publicationDiv, -1);
+            });
+
+            publicationDiv.querySelector('.move-down').addEventListener('click', function () {
+                movePublication(publicationDiv, 1);
+            });
+
+            publicationDiv.querySelector('.remove-item').addEventListener('click', function () {
+                publicationsSection.removeChild(publicationDiv); // Remove the publication field
+                updatePublicationIndices(); // Update indices after removal
+            });
+        }
+
+        // Function to move publication up or down
+        function movePublication(publicationDiv, direction) {
+            const publicationsSection = document.getElementById('publications-section');
+            const index = parseInt(publicationDiv.getAttribute('data-index'), 10);
+            const targetIndex = index + direction;
+
+            const targetPublicationDiv = publicationsSection.querySelector(`.publication-item[data-index="${targetIndex}"]`);
+
+            if (targetPublicationDiv) {
+                // Swap the publications
+                if (direction === -1) {
+                    publicationsSection.insertBefore(publicationDiv, targetPublicationDiv);
+                } else {
+                    publicationsSection.insertBefore(targetPublicationDiv, publicationDiv);
+                }
+                // Update the indices after moving
+                publicationDiv.setAttribute('data-index', targetIndex);
+                targetPublicationDiv.setAttribute('data-index', index);
+                updatePublicationIndices(); // Update indices after moving
+            }
+        }
+
+        // Function to update indices after any operation
+        function updatePublicationIndices() {
+            const publicationsSection = document.getElementById('publications-section');
+            const items = publicationsSection.querySelectorAll('.publication-item');
+
+            items.forEach((item, newIndex) => {
+                item.setAttribute('data-index', newIndex); // Update index attribute
+                item.querySelector('input[type="month"]').name = `publications_date_${newIndex}`; // Update date input name
+                item.querySelector('select').name = `publications_type_${newIndex}`; // Update type select name
+                item.querySelector('input[name^="publications_title_"]').name = `publications_title_${newIndex}`; // Update title input name
+                item.querySelector('input[name^="publications_link_"]').name = `publications_link_${newIndex}`; // Update link input name
+                const otherTypeInput = item.querySelector('input[name^="other_publications_type_"]');
+                if (otherTypeInput) {
+                    otherTypeInput.name = `other_publications_type_${newIndex}`; // Update the "Other" type input name
+                }
+            });
+        }
+    });
+</script>
+
+
+
+
+<script>
+    // Toggle visibility of the PhD section based on the selected radio button
+    document.querySelector('#supervisor-yes').addEventListener('change', function () {
+        document.querySelector('#phd-section').style.display = 'block'; // Show the PhD section
+    });
+
+    document.querySelector('#supervisor-no').addEventListener('change', function () {
+        document.querySelector('#phd-section').style.display = 'none'; // Hide the PhD section
+    });
+
+    // Function to add dynamic PhD Scholar fields
+    function addDynamicFieldPhD(buttonId, sectionId, fieldCallback) {
+        let index = 0;
+        document.querySelector(buttonId).addEventListener('click', function () {
+            const section = document.querySelector(sectionId);
+            section.insertAdjacentHTML('beforeend', fieldCallback(index));
+            index++;
+        });
+
+        // Handle removing a PhD scholar dynamically
+        document.addEventListener('click', function (e) {
+            if (e.target && e.target.classList.contains('remove-item')) {
+                e.target.parentElement.remove();
+            }
+        });
+    }
+
+    // Generate the HTML for each PhD scholar input form
+    addDynamicFieldPhD('#add-phd-scholar', '#phd-scholars-section', function (index) {
+        return `
+            <div class="form-group">
+                <input type="text" name="phd_name_${index}" class="form-control" placeholder="Name of the scholar" required>
+                <input type="text" name="phd_topic_${index}" class="form-control mt-2" placeholder="Topic" required>
+                <select name="phd_status_${index}" class="form-control mt-2" required>
+                    <option value="" disabled selected>Status</option>
+                    <option value="completed">Completed</option>
+                    <option value="ongoing">Ongoing</option>
+                    <option value="thesis submitted">Thesis Submitted</option>
+                    <option value="discontinued">Discontinued</option>
+                </select>
+                <input type="text" name="phd_years_${index}" class="form-control mt-2" placeholder="Year of Completion">
+                <button type="button" class="btn btn-danger remove-item mt-2">Remove</button>
+            </div>
+        `;
+    });
+</script>
+
+<script>
+    function updateCount(textareaId, countId, maxLength) {
+        const textarea = document.getElementById(textareaId);
+        const countDisplay = document.getElementById(countId);
+        const currentLength = textarea.value.length;
+
+        countDisplay.textContent = `${currentLength}/${maxLength}`;
+
+        // Show or hide error message based on length
+        const errorMessage = document.getElementById(textareaId === 'careerHighlights' ? 'careerError' : 'researchError');
+        if (currentLength > maxLength) {
+            errorMessage.style.display = 'block'; // Show error message
+        } else {
+            errorMessage.style.display = 'none'; // Hide error message
+        }
+    }
+
+    function validateForm() {
+        const careerTextarea = document.getElementById('careerHighlights');
+        const researchTextarea = document.getElementById('researchCareer');
+
+        // Check if either textarea exceeds the limit
+        if (careerTextarea.value.length > 500 || researchTextarea.value.length > 500) {
+            alert('You have exceeded the maximum character limit of 500 characters. Please correct this before submitting.');
+            return false; // Prevent submission
+        }
+        return true; // Allow submission
+    }
+
+</script>
+
+
+
+{% endblock %}

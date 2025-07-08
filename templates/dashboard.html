@@ -1,0 +1,746 @@
+{% extends 'layout.html' %}
+
+{% block title %}Researcher Profile {% endblock %}
+
+{% block extra_styles %}
+<!-- Link to your external stylesheet -->
+<link href="{{ url_for('static', filename='css/dashboard.css') }}" rel="stylesheet" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+<!-- Bootstrap CSS -->
+<link href="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/css/bootstrap.min.css" rel="stylesheet">
+
+<!-- FontAwesome (for the info-circle icon) -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+
+<!-- Bootstrap Bundle with Popper -->
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/js/bootstrap.bundle.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
+
+<script>
+    // Initialize Bootstrap tooltips
+    document.addEventListener('DOMContentLoaded', function () {
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl)
+        })
+    });
+</script>
+
+{% endblock %}
+
+
+
+{% block content %}
+<div class="notification hide" id="notification">
+    <div class="notification__icon" id="notification-icon">
+        <!-- Icons will be dynamically inserted here -->
+    </div>
+    <div class="notification__title" id="notification-title"></div>
+    <div class="notification__close" id="notification-close">
+        <span class="material-icons">close</span>
+    </div>
+</div>
+
+<section class="policy-research-development"> 
+    <!-- <h2>Policy on Research and Development</h2>-->
+    <p class="subheader">An Overview of the Researcher Profile</p>
+    <ul>
+        <li
+            style="text-indent: 40px;"> The Deanery of Research & Development at Madras Christian College is committed to creating a sustainable research ecosystem on campus by providing the necessary support and infrastructure for faculty and research scholars to pursue their research interests. Our faculty, renowned for their expertise across various disciplines are dedicated to advancing knowledge through academic research, innovative project development and patent generation.  
+        </li>
+        <li style="text-indent: 40px;" id="search2">
+            The Researcher’s Profile platform is structured to enhance the visibility of our faculty members by providing a comprehensive overview of their research interests, areas of expertise along with their publications and projects. This will be a valuable resource for external researchers to identify faculty by their research interests and areas of expertise, to facilitate collaboration, develop interdisciplinary project development and knowledge sharing within the academic community.
+        </li>
+        
+    </ul>
+</section>
+
+<section class="search-bar">
+
+    <form id="search-form">
+        <input type="text" id="search-input" name="search" placeholder="Search with multiple keywords separted by comma..."
+            value="{{ search_query }}" autocomplete="off">
+        <span id="clear-icon" onclick="clearSearch()">×</span>
+        <span id="instruction-icon">
+            <i class="fas fa-info-circle"></i>
+        </span>
+        <div id="tooltip-content" class="tooltip-content">
+            <h6>You can search by Name, Area of Specialisation, Keywords of Research paper</h6> 
+        </div>
+    </form>
+
+
+    <div id="search-results"></div>
+</section>
+
+<section class="staff-cards" id="staffCards">
+    {% if search_query and staff_details %}
+    {% for detail in staff_details %}
+    <div class="card">
+        <table>
+            <tr>
+                <td class="img-cell">
+                    {% if detail.profile_picture %}
+                    <img src="{{ url_for('static', filename='uploads/' + detail.profile_picture) }}"
+                        alt="Profile Picture">
+                    {% else %}
+                    <img src="{{ url_for('static', filename='uploads/default.webp') }}" alt="Default Profile Picture">
+                    {% endif %}
+                </td>
+                <td class="name-cell">
+                    <h2>{{ detail.name }}</h2>
+                </td>
+                <td class="info-cell">
+                    <p>{{ detail.matched_text }}</p>
+                </td>
+                <td class="button-cell">
+                    <a href="{{ url_for('view_details', id=detail.id) }}">
+                        <button type="button">View</button>
+                    </a>
+                </td>
+            </tr>
+        </table>
+    </div>
+    {% endfor %}
+    {% elif search_query %}
+    <p>No Profile found matching your search criteria.</p>
+    {% endif %}
+</section>
+</br>
+</br>
+<section class="academic-programmes">
+    <h1>Search Department-Wise</h1>
+    <div class="container">
+        <h2>Aided Stream</h2>
+        <div class="programme-list">
+            <ul>
+                <li class="hover-list">
+                    <a href="javascript:void(0);" onmouseover="toggleStaffList('Aided_English', event)">English</a>
+                    <ul class="staff-list" id="staff-Aided_English">
+                        {% for staff in departments_with_staff['English - Aided'] %}
+                        <li><a href="{{ url_for('view_details', id=staff['id']) }}">• {{ staff['name'] }}</a></li>
+                        {% else %}
+                        <li>No staff members found.</li>
+                        {% endfor %}
+                    </ul>
+                </li>
+                
+                <li class="hover-list">
+                    <a href="javascript:void(0);" onmouseover="toggleStaffList('Aided_Tamil', event)">Tamil</a>
+                    <ul class="staff-list" id="staff-Aided_Tamil">
+                        {% for staff in departments_with_staff['Tamil - Aided'] %}
+                        <li><a href="{{ url_for('view_details', id=staff['id']) }}">• {{ staff['name'] }}</a></li>
+                        {% else %}
+                        <li>No staff members found.</li>
+                        {% endfor %}
+                    </ul>
+                </li>
+                
+                <li class="hover-list">
+                    <a href="javascript:void(0);" onmouseover="toggleStaffList('Aided_Languages', event)">Languages </a>
+                    <ul class="staff-list" id="staff-Aided_Languages">
+                        {% for staff in departments_with_staff['Languages - Aided'] %}
+                        <li><a href="{{ url_for('view_details', id=staff['id']) }}">• {{ staff['name'] }}</a></li>
+                        {% else %}
+                        <li>No staff members found.</li>
+                        {% endfor %}
+                    </ul>
+                </li>
+                
+                <li class="hover-list">
+                    <a href="javascript:void(0);" onmouseover="toggleStaffList('Aided_History', event)">History </a>
+                    <ul class="staff-list" id="staff-Aided_History">
+                        {% for staff in departments_with_staff['History - Aided'] %}
+                        <li><a href="{{ url_for('view_details', id=staff['id']) }}">• {{ staff['name'] }}</a></li>
+                        {% else %}
+                        <li>No staff members found.</li>
+                        {% endfor %}
+                    </ul>
+                </li>
+                
+                <li class="hover-list">
+                    <a href="javascript:void(0);" onmouseover="toggleStaffList('Aided_Political_Science', event)">Political Science</a>
+                    <ul class="staff-list" id="staff-Aided_Political_Science">
+                        {% for staff in departments_with_staff['Political Science - Aided'] %}
+                        <li><a href="{{ url_for('view_details', id=staff['id']) }}">• {{ staff['name'] }}</a></li>
+                        {% else %}
+                        <li>No staff members found.</li>
+                        {% endfor %}
+                    </ul>
+                </li>
+                
+                <li class="hover-list">
+                    <a href="javascript:void(0);" onmouseover="toggleStaffList('Aided_Public_Administration', event)">Public Administration </a>
+                    <ul class="staff-list" id="staff-Aided_Public_Administration">
+                        {% for staff in departments_with_staff['Public Administration - Aided'] %}
+                        <li><a href="{{ url_for('view_details', id=staff['id']) }}">• {{ staff['name'] }}</a></li>
+                        {% else %}
+                        <li>No staff members found.</li>
+                        {% endfor %}
+                    </ul>
+                </li>
+                
+                <li class="hover-list">
+                    <a href="javascript:void(0);" onmouseover="toggleStaffList('Aided_Economics', event)">Economics </a>
+                    <ul class="staff-list" id="staff-Aided_Economics">
+                        {% for staff in departments_with_staff['Economics - Aided'] %}
+                        <li><a href="{{ url_for('view_details', id=staff['id']) }}">• {{ staff['name'] }}</a></li>
+                        {% else %}
+                        <li>No staff members found.</li>
+                        {% endfor %}
+                    </ul>
+                </li>
+                
+                <li class="hover-list">
+                    <a href="javascript:void(0);" onmouseover="toggleStaffList('Aided_Philosophy', event)">Philosophy </a>
+                    <ul class="staff-list" id="staff-Aided_Philosophy">
+                        {% for staff in departments_with_staff['Philosophy - Aided'] %}
+                        <li><a href="{{ url_for('view_details', id=staff['id']) }}">• {{ staff['name'] }}</a></li>
+                        {% else %}
+                        <li>No staff members found.</li>
+                        {% endfor %}
+                    </ul>
+                </li>
+                
+                <li class="hover-list">
+                    <a href="javascript:void(0);" onmouseover="toggleStaffList('Aided_Commerce', event)">Commerce </a>
+                    <ul class="staff-list" id="staff-Aided_Commerce">
+                        {% for staff in departments_with_staff['Commerce - Aided'] %}
+                        <li><a href="{{ url_for('view_details', id=staff['id']) }}">• {{ staff['name'] }}</a></li>
+                        {% else %}
+                        <li>No staff members found.</li>
+                        {% endfor %}
+                    </ul>
+                </li>
+            </ul>
+            
+                
+            <ul>
+                <li class="hover-list">
+                    <a href="javascript:void(0);" onmouseover="toggleStaffList('Aided_Social_Work', event)">Social Work </a>
+                    <ul class="staff-list" id="staff-Aided_Social_Work">
+                        {% for staff in departments_with_staff['Social Work - Aided'] %}
+                        <li><a href="{{ url_for('view_details', id=staff['id']) }}">• {{ staff['name'] }}</a></li>
+                        {% else %}
+                        <li>No staff members found.</li>
+                        {% endfor %}
+                    </ul>
+                </li>
+                
+                <li class="hover-list">
+                    <a href="javascript:void(0);" onmouseover="toggleStaffList('Aided_Mathematics', event)">Mathematics </a>
+                    <ul class="staff-list" id="staff-Aided_Mathematics">
+                        {% for staff in departments_with_staff['Mathematics - Aided'] %}
+                        <li><a href="{{ url_for('view_details', id=staff['id']) }}">• {{ staff['name'] }}</a></li>
+                        {% else %}
+                        <li>No staff members found.</li>
+                        {% endfor %}
+                    </ul>
+                </li>
+                
+                <li class="hover-list">
+                    <a href="javascript:void(0);" onmouseover="toggleStaffList('Aided_Statistics', event)">Statistics </a>
+                    <ul class="staff-list" id="staff-Aided_Statistics">
+                        {% for staff in departments_with_staff['Statistics - Aided'] %}
+                        <li><a href="{{ url_for('view_details', id=staff['id']) }}">• {{ staff['name'] }}</a></li>
+                        {% else %}
+                        <li>No staff members found.</li>
+                        {% endfor %}
+                    </ul>
+                </li>
+                
+                <li class="hover-list">
+                    <a href="javascript:void(0);" onmouseover="toggleStaffList('Aided_Physics', event)">Physics </a>
+                    <ul class="staff-list" id="staff-Aided_Physics">
+                        {% for staff in departments_with_staff['Physics - Aided'] %}
+                        <li><a href="{{ url_for('view_details', id=staff['id']) }}">• {{ staff['name'] }}</a></li>
+                        {% else %}
+                        <li>No staff members found.</li>
+                        {% endfor %}
+                    </ul>
+                </li>
+                
+                <li class="hover-list">
+                    <a href="javascript:void(0);" onmouseover="toggleStaffList('Aided_Chemistry', event)">Chemistry </a>
+                    <ul class="staff-list" id="staff-Aided_Chemistry">
+                        {% for staff in departments_with_staff['Chemistry - Aided'] %}
+                        <li><a href="{{ url_for('view_details', id=staff['id']) }}">• {{ staff['name'] }}</a></li>
+                        {% else %}
+                        <li>No staff members found.</li>
+                        {% endfor %}
+                    </ul>
+                </li>
+                
+                <li class="hover-list">
+                    <a href="javascript:void(0);" onmouseover="toggleStaffList('Aided_Botany', event)">Botany </a>
+                    <ul class="staff-list" id="staff-Aided_Botany">
+                        {% for staff in departments_with_staff['Botany - Aided'] %}
+                        <li><a href="{{ url_for('view_details', id=staff['id']) }}">• {{ staff['name'] }}</a></li>
+                        {% else %}
+                        <li>No staff members found.</li>
+                        {% endfor %}
+                    </ul>
+                </li>
+                
+                <li class="hover-list">
+                    <a href="javascript:void(0);" onmouseover="toggleStaffList('Aided_Zoology', event)">Zoology </a>
+                    <ul class="staff-list" id="staff-Aided_Zoology">
+                        {% for staff in departments_with_staff['Zoology - Aided'] %}
+                        <li><a href="{{ url_for('view_details', id=staff['id']) }}">• {{ staff['name'] }}</a></li>
+                        {% else %}
+                        <li>No staff members found.</li>
+                        {% endfor %}
+                    </ul>
+                </li>
+                
+                <li class="hover-list">
+                    <a href="javascript:void(0);" onmouseover="toggleStaffList('Aided_Physical_Education', event)">Physical Education </a>
+                    <ul class="staff-list" id="staff-Aided_Physical_Education">
+                        {% for staff in departments_with_staff['Physical Education - Aided'] %}
+                        <li><a href="{{ url_for('view_details', id=staff['id']) }}">• {{ staff['name'] }}</a></li>
+                        {% else %}
+                        <li>No staff members found.</li>
+                        {% endfor %}
+                    </ul>
+                </li>
+            </ul>
+            
+        </div>
+    </br>
+        
+        <h2>Self - Financed Stream</h2>
+        <div class="programme-list">
+            <ul>
+                <li class="hover-list">
+                    <a href="javascript:void(0);" onmouseover="toggleStaffList('Self_Financed_English', event)">English</a>
+                    <ul class="staff-list" id="staff-Self_Financed_English">
+                        {% for staff in departments_with_staff['English - SFS'] %}
+                        <li><a href="{{ url_for('view_details', id=staff['id']) }}">• {{ staff['name'] }}</a></li>
+                        {% else %}
+                        <li>No staff members found.</li>
+                        {% endfor %}
+                    </ul>
+                </li>
+                
+                <li class="hover-list">
+                    <a href="javascript:void(0);" onmouseover="toggleStaffList('Self_Financed_Tamil', event)">Tamil</a>
+                    <ul class="staff-list" id="staff-Self_Financed_Tamil">
+                        {% for staff in departments_with_staff['Tamil - SFS'] %}
+                        <li><a href="{{ url_for('view_details', id=staff['id']) }}">• {{ staff['name'] }}</a></li>
+                        {% else %}
+                        <li>No staff members found.</li>
+                        {% endfor %}
+                    </ul>
+                </li>
+                
+                <li class="hover-list">
+                    <a href="javascript:void(0);" onmouseover="toggleStaffList('Self_Financed_Languages', event)">Languages</a>
+                    <ul class="staff-list" id="staff-Self_Financed_Languages">
+                        {% for staff in departments_with_staff['Languages - SFS'] %}
+                        <li><a href="{{ url_for('view_details', id=staff['id']) }}">• {{ staff['name'] }}</a></li>
+                        {% else %}
+                        <li>No staff members found.</li>
+                        {% endfor %}
+                    </ul>
+                </li>
+                
+                <li class="hover-list">
+                    <a href="javascript:void(0);" onmouseover="toggleStaffList('Self_Financed_Journalism', event)">Journalism</a>
+                    <ul class="staff-list" id="staff-Self_Financed_Journalism">
+                        {% for staff in departments_with_staff['Journalism - SFS'] %}
+                        <li><a href="{{ url_for('view_details', id=staff['id']) }}">• {{ staff['name'] }}</a></li>
+                        {% else %}
+                        <li>No staff members found.</li>
+                        {% endfor %}
+                    </ul>
+                </li>
+                
+                <li class="hover-list">
+                    <a href="javascript:void(0);" onmouseover="toggleStaffList('Self_Financed_Social_Work', event)">Social Work</a>
+                    <ul class="staff-list" id="staff-Self_Financed_Social_Work">
+                        {% for staff in departments_with_staff['Social Work - SFS'] %}
+                        <li><a href="{{ url_for('view_details', id=staff['id']) }}">• {{ staff['name'] }}</a></li>
+                        {% else %}
+                        <li>No staff members found.</li>
+                        {% endfor %}
+                    </ul>
+                </li>
+                
+                <li class="hover-list">
+                    <a href="javascript:void(0);" onmouseover="toggleStaffList('Self_Financed_Commerce', event)">Commerce</a>
+                    <ul class="staff-list" id="staff-Self_Financed_Commerce">
+                        {% for staff in departments_with_staff['Commerce - SFS'] %}
+                        <li><a href="{{ url_for('view_details', id=staff['id']) }}">• {{ staff['name'] }}</a></li>
+                        {% else %}
+                        <li>No staff members found.</li>
+                        {% endfor %}
+                    </ul>
+                </li>
+                
+                <li class="hover-list">
+                    <a href="javascript:void(0);" onmouseover="toggleStaffList('Self_Financed_Business_Administration', event)">Business Administration</a>
+                    <ul class="staff-list" id="staff-Self_Financed_Business_Administration">
+                        {% for staff in departments_with_staff['Business Administration - SFS'] %}
+                        <li><a href="{{ url_for('view_details', id=staff['id']) }}">• {{ staff['name'] }}</a></li>
+                        {% else %}
+                        <li>No staff members found.</li>
+                        {% endfor %}
+                    </ul>
+                </li>
+                
+                <li class="hover-list">
+                    <a href="javascript:void(0);" onmouseover="toggleStaffList('Self_Financed_Communication', event)">Communication</a>
+                    <ul class="staff-list" id="staff-Self_Financed_Communication">
+                        {% for staff in departments_with_staff['Communication - SFS'] %}
+                        <li><a href="{{ url_for('view_details', id=staff['id']) }}">• {{ staff['name'] }}</a></li>
+                        {% else %}
+                        <li>No staff members found.</li>
+                        {% endfor %}
+                    </ul>
+                </li>
+                
+                <li class="hover-list">
+                    <a href="javascript:void(0);" onmouseover="toggleStaffList('Self_Financed_Geography', event)">Geography</a>
+                    <ul class="staff-list" id="staff-Self_Financed_Geography">
+                        {% for staff in departments_with_staff['Geography - SFS'] %}
+                        <li><a href="{{ url_for('view_details', id=staff['id']) }}">• {{ staff['name'] }}</a></li>
+                        {% else %}
+                        <li>No staff members found.</li>
+                        {% endfor %}
+                    </ul>
+                </li>
+                
+                <li class="hover-list">
+                    <a href="javascript:void(0);" onmouseover="toggleStaffList('Self_Financed_Tourism_Studies', event)">Tourism Studies</a>
+                    <ul class="staff-list" id="staff-Self_Financed_Tourism_Studies">
+                        {% for staff in departments_with_staff['Tourism Studies - SFS'] %}
+                        <li><a href="{{ url_for('view_details', id=staff['id']) }}">• {{ staff['name'] }}</a></li>
+                        {% else %}
+                        <li>No staff members found.</li>
+                        {% endfor %}
+                    </ul>
+                </li>
+                
+                <li class="hover-list">
+                    <a href="javascript:void(0);" onmouseover="toggleStaffList('Self_Financed_Mathematics', event)">Mathematics</a>
+                    <ul class="staff-list" id="staff-Self_Financed_Mathematics">
+                        {% for staff in departments_with_staff['Mathematics - SFS'] %}
+                        <li><a href="{{ url_for('view_details', id=staff['id']) }}">• {{ staff['name'] }}</a></li>
+                        {% else %}
+                        <li>No staff members found.</li>
+                        {% endfor %}
+                    </ul>
+                </li>
+            </ul>
+            
+            <ul>
+                <li class="hover-list">
+                    <a href="javascript:void(0);" onmouseover="toggleStaffList('Self_Financed_Physics', event)">Physics</a>
+                    <ul class="staff-list" id="staff-Self_Financed_Physics">
+                        {% for staff in departments_with_staff['Physics - SFS'] %}
+                        <li><a href="{{ url_for('view_details', id=staff['id']) }}">• {{ staff['name'] }}</a></li>
+                        {% else %}
+                        <li>No staff members found.</li>
+                        {% endfor %}
+                    </ul>
+                </li>
+                
+                <li class="hover-list">
+                    <a href="javascript:void(0);" onmouseover="toggleStaffList('Self_Financed_Chemistry', event)">Chemistry</a>
+                    <ul class="staff-list" id="staff-Self_Financed_Chemistry">
+                        {% for staff in departments_with_staff['Chemistry - SFS'] %}
+                        <li><a href="{{ url_for('view_details', id=staff['id']) }}">• {{ staff['name'] }}</a></li>
+                        {% else %}
+                        <li>No staff members found.</li>
+                        {% endfor %}
+                    </ul>
+                </li>
+                
+                <li class="hover-list">
+                    <a href="javascript:void(0);" onmouseover="toggleStaffList('Self_Financed_Microbiology', event)">Microbiology</a>
+                    <ul class="staff-list" id="staff-Self_Financed_Microbiology">
+                        {% for staff in departments_with_staff['Microbiology - SFS'] %}
+                        <li><a href="{{ url_for('view_details', id=staff['id']) }}">• {{ staff['name'] }}</a></li>
+                        {% else %}
+                        <li>No staff members found.</li>
+                        {% endfor %}
+                    </ul>
+                </li>
+                
+                <li class="hover-list">
+                    <a href="javascript:void(0);" onmouseover="toggleStaffList('Self_Financed_Computer_Application', event)">Computer Application (BCA)</a>
+                    <ul class="staff-list" id="staff-Self_Financed_Computer_Application">
+                        {% for staff in departments_with_staff['Computer Application (BCA) - SFS'] %}
+                        <li><a href="{{ url_for('view_details', id=staff['id']) }}">• {{ staff['name'] }}</a></li>
+                        {% else %}
+                        <li>No staff members found.</li>
+                        {% endfor %}
+                    </ul>
+                </li>
+                
+                <li class="hover-list">
+                    <a href="javascript:void(0);" onmouseover="toggleStaffList('Self_Financed_Computer_Science_BSc', event)">Computer Science (B.Sc)</a>
+                    <ul class="staff-list" id="staff-Self_Financed_Computer_Science_BSc">
+                        {% for staff in departments_with_staff['Computer Science (B.Sc) - SFS'] %}
+                        <li><a href="{{ url_for('view_details', id=staff['id']) }}">• {{ staff['name'] }}</a></li>
+                        {% else %}
+                        <li>No staff members found.</li>
+                        {% endfor %}
+                    </ul>
+                </li>
+                
+                <li class="hover-list">
+                    <a href="javascript:void(0);" onmouseover="toggleStaffList('Self_Financed_Computer_Science_MCA', event)">Computer Science (MCA)</a>
+                    <ul class="staff-list" id="staff-Self_Financed_Computer_Science_MCA">
+                        {% for staff in departments_with_staff['Computer Science (MCA) - SFS'] %}
+                        <li><a href="{{ url_for('view_details', id=staff['id']) }}">• {{ staff['name'] }}</a></li>
+                        {% else %}
+                        <li>No staff members found.</li>
+                        {% endfor %}
+                    </ul>
+                </li>
+                
+                <li class="hover-list">
+                    <a href="javascript:void(0);" onmouseover="toggleStaffList('Self_Financed_Visual_Communication', event)">Visual Communication</a>
+                    <ul class="staff-list" id="staff-Self_Financed_Visual_Communication">
+                        {% for staff in departments_with_staff['Visual Communication - SFS'] %}
+                        <li><a href="{{ url_for('view_details', id=staff['id']) }}">• {{ staff['name'] }}</a></li>
+                        {% else %}
+                        <li>No staff members found.</li>
+                        {% endfor %}
+                    </ul>
+                </li>
+                
+                <li class="hover-list">
+                    <a href="javascript:void(0);" onmouseover="toggleStaffList('Self_Financed_Physical_Education', event)">Physical Education, Health Education and Sports</a>
+                    <ul class="staff-list" id="staff-Self_Financed_Physical_Education">
+                        {% for staff in departments_with_staff['Physical Education, Health Education and Sports - SFS'] %}
+                        <li><a href="{{ url_for('view_details', id=staff['id']) }}">• {{ staff['name'] }}</a></li>
+                        {% else %}
+                        <li>No staff members found.</li>
+                        {% endfor %}
+                    </ul>
+                </li>
+                
+                <li class="hover-list">
+                    <a href="javascript:void(0);" onmouseover="toggleStaffList('Self_Financed_Psychology', event)">Psychology</a>
+                    <ul class="staff-list" id="staff-Self_Financed_Psychology">
+                        {% for staff in departments_with_staff['Psychology - SFS'] %}
+                        <li><a href="{{ url_for('view_details', id=staff['id']) }}">• {{ staff['name'] }}</a></li>
+                        {% else %}
+                        <li>No staff members found.</li>
+                        {% endfor %}
+                    </ul>
+                </li>
+                
+                <li class="hover-list">
+                    <a href="javascript:void(0);" onmouseover="toggleStaffList('Self_Financed_Data_Science', event)">Data Science</a>
+                    <ul class="staff-list" id="staff-Self_Financed_Data_Science">
+                        {% for staff in departments_with_staff['Data Science - SFS'] %}
+                        <li><a href="{{ url_for('view_details', id=staff['id']) }}">• {{ staff['name'] }}</a></li>
+                        {% else %}
+                        <li>No staff members found.</li>
+                        {% endfor %}
+                    </ul>
+                </li>
+            </ul>
+            
+        </div>
+    </br>
+        <h2>Units</h2>
+        <div class="programme-list">
+            <ul>
+                <li class="hover-list">
+                    <a href="javascript:void(0);" onmouseover="toggleStaffList('mmip', event)">MCC - MRF Innovation Park</a>
+                    <ul class="staff-list" id="staff-mmip">
+                        {% for staff in departments_with_staff['MCC - MRF Innovation Park'] %}
+                        <li><a href="{{ url_for('view_details', id=staff['id']) }}">• {{ staff['name'] }}</a></li>
+                        {% else %}
+                        <li>No staff members found.</li>
+                        {% endfor %}
+                    </ul>
+                </li>
+            </ul>
+        </div> </br></br>
+
+    </div>
+</section>
+
+
+<script>
+    function showNotification(message, type = 'error') {
+        const notification = document.getElementById('notification');
+        const notificationTitle = document.getElementById('notification-title');
+        const notificationIcon = document.getElementById('notification-icon');
+
+        // Reset classes before applying new ones
+        notification.className = 'notification hide'; // Reset class list to hide the notification first
+        notificationTitle.textContent = message;
+
+        // Clear any existing icon
+        notificationIcon.innerHTML = '';
+
+        // Insert the appropriate icon based on the type
+        if (type === 'success') {
+            notificationIcon.innerHTML = `
+        <span class="material-icons" style="color: #155724;">check_circle</span>`;
+        } else if (type === 'error') {
+            notificationIcon.innerHTML = `
+        <span class="material-icons" style="color: #721c24;">error</span>`;
+        }
+
+        // Add the type-specific class
+        notification.classList.add(type);
+
+        // Make the notification visible
+        notification.classList.remove('hide');
+        notification.classList.add('show');
+
+        setTimeout(() => {
+            // Start hiding the notification
+            notification.classList.remove('show');
+            notification.classList.add('hide');
+
+            setTimeout(() => {
+                notification.style.display = 'none'; // Hide the notification after animation
+            }, 500); // Delay to match the transition duration
+        }, 5000); // Hide after 5 seconds
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        // Parse flashed messages from Flask
+        const messages = JSON.parse('{{ get_flashed_messages(with_categories=True) | tojson | safe }}');
+
+        // Check if there are any messages to display
+        if (messages.length > 0) {
+            messages.forEach(msg => {
+                showNotification(msg[1], msg[0]); // Show each message with its type
+            });
+        } else {
+            const notification = document.getElementById('notification');
+            notification.style.display = 'none'; // Ensure hidden if no messages
+        }
+    });
+
+    // Handle close button click to manually hide notification
+    document.getElementById('notification-close').addEventListener('click', () => {
+        const notification = document.getElementById('notification');
+        notification.classList.remove('show');
+        notification.classList.add('hide');
+
+        setTimeout(() => {
+            notification.style.display = 'none'; // Hide the notification after animation
+        }, 500); // Delay to match the transition duration
+    });
+
+</script>
+
+<script>
+
+    function toggleStaffList(department, event) {
+        event.preventDefault(); // Prevent the default action of the link
+
+        // Sanitize department name for the ID
+        var sanitizedDepartment = department.replace(/[\s\(\)\.\-]/g, '_');
+        var staffList = document.getElementById('staff-' + sanitizedDepartment);
+        staffList.style.display = 'block';
+    }
+</script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const searchInput = document.getElementById('search-input');
+        const staffCards = document.getElementById('staffCards');
+        const clearIcon = document.getElementById('clear-icon');
+
+        // Listen for input changes
+        searchInput.addEventListener('input', function () {
+            const query = searchInput.value.trim();
+
+            if (query) {
+                clearIcon.style.display = 'inline'; // Show the clear icon
+
+                // Send AJAX request to the server with the search query
+                fetch(`/dashboard?search=${encodeURIComponent(query)}`, {
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest'  // Identify this as an AJAX request
+                    }
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        // Clear previous staff cards
+                        staffCards.innerHTML = '';
+
+                        if (data.length > 0) {
+                            // Display new staff cards
+                            data.forEach(detail => {
+                                const card = document.createElement('div');
+                                card.className = 'card';
+
+                                // Create table structure
+                                card.innerHTML = `
+                            <table>
+                                <tr>
+                                    <td class="img-cell">
+                                        ${detail.profile_picture ?
+                                        `<img src="/static/uploads/${detail.profile_picture}" alt="Profile Picture">` :
+                                        `<img src="/static/uploads/default.webp" alt="Default Profile Picture">`
+                                    }
+                                    </td>
+                                    <td class="name-cell">
+                                        <h2>${detail.name}</h2>
+                                    </td>
+                                    <td class="info-cell">
+                                        <p>${detail.matched_text || ''}</p>
+                                    </td>
+                                    <td class="button-cell">
+                                        <a href="/view_details/${detail.id}">
+                                            <button type="button">View</button>
+                                        </a>
+                                    </td>
+                                </tr>
+                            </table>
+                        `;
+
+                                staffCards.appendChild(card);
+                            });
+                        } else {
+                            // If no results, show message
+                            staffCards.innerHTML = `<p>No Profile found matching your search criteria.</p>`;
+                        }
+                    })
+                    .catch(error => console.error('Error fetching search results:', error));
+            } else {
+                clearIcon.style.display = 'none'; // Hide the clear icon
+                staffCards.innerHTML = ''; // Clear staff cards if input is empty
+            }
+        });
+
+        // Clear the search input and staff cards when the clear icon is clicked
+        clearIcon.addEventListener('click', function () {
+            searchInput.value = ''; // Clear the input field
+            searchInput.focus(); // Keep focus on the input field
+            clearIcon.style.display = 'none'; // Hide the clear icon
+            staffCards.innerHTML = ''; // Clear the staff cards
+        });
+    });
+
+</script>
+<script>
+    function clearSearch() {
+        document.getElementById('search-input').value = '';
+    }
+</script>
+<script>
+    function toggleStaffList(id, event) {
+        // Your existing logic to toggle the staff list
+
+        // Ensure no unwanted scroll behavior occurs
+        event.preventDefault(); // This should not be necessary for a non-anchor link
+    }
+
+</script>
+{% endblock %}

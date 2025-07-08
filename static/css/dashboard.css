@@ -1,0 +1,749 @@
+[data-bs-theme="dark"] {
+    --header-bg-color: #343a40;
+    --header-text-color: #ffffff;
+    --footer-bg-color: #343a40;
+    --button-bg-color: #343a40;
+}
+
+[data-bs-theme="light"] {
+    --header-bg-color: #f8f9fa;
+    --header-text-color: #000000;
+    --footer-bg-color: #78091e;
+    --button-bg-color: #929292;
+}
+
+.notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    display: flex;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: #f8d7da; /* Default background color for error */
+    color: #721c24; /* Default text color for error */
+    border-radius: 5px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
+    transform: translateY(-10px);
+    z-index: 9999; /* Ensure it's above most other elements */
+}
+
+
+.notification.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.notification.hide {
+    opacity: 0;
+    transform: translateY(-10px);
+}
+
+/* Icon and Title Styles */
+.notification__icon {
+    margin-right: 10px; /* Space between icon and text */
+}
+
+.notification__title {
+    flex: 1; /* Allow title to take up remaining space */
+}
+
+/* Close Button Style */
+.notification__close {
+    margin-left: 20px; /* Space between text and close button */
+    cursor: pointer;
+}
+
+/* Success Notification Styles */
+.notification.success {
+    background-color: #d4edda; /* Light green background */
+    color: #155724; /* Dark green text color */
+}
+
+.notification.success .notification__icon {
+    color: #155724; /* Dark green icon color */
+}
+
+.notification.success .notification__title {
+    color: #155724; /* Dark green text color */
+}
+
+.notification.success .notification__close {
+    color: #155724; /* Dark green close button color */
+}
+
+/* Error Notification Styles */
+.notification.error {
+    background-color: #f8d7da; /* Light red background */
+    color: #721c24; /* Dark red text color */
+}
+
+.notification.error .notification__icon {
+    color: #721c24; /* Dark red icon color */
+}
+
+.notification.error .notification__title {
+    color: #721c24; /* Dark red text color */
+}
+
+.notification.error .notification__close {
+    color: #721c24; /* Dark red close button color */
+}
+
+/* Google Material Icons (assuming use for close button) */
+.material-icons {
+    font-family: 'Material Icons';
+    font-size: 20px;
+}
+
+
+
+[data-bs-theme="dark"] {
+    --header-bg-color: #343a40;
+    --header-text-color: #ffffff;
+    --footer-bg-color: #343a40;
+    --footer2-bg-color: #ffffff;
+    --main-text2-color: #ffffff;
+
+}
+
+[data-bs-theme="light"] {
+    --header-bg-color: #f8f9fa;
+    --header-text-color: #000000;
+    --footer-bg-color: #78091e;
+    --footer2-bg-color: #78091e;
+    
+    --main-text2-color: #3eb668;
+}
+
+
+
+
+/* Search Bar */
+.search-bar {
+    margin: 80px 20px 20px;
+    text-align: center;
+    position: relative; /* Ensure the clear icon is positioned relative to the input */
+    margin-top: -180px;
+}
+
+.search-bar input[type="text"] {
+    width: 40%;
+    padding: 10px;
+    padding-right: 30px; /* Make space for the clear icon */
+    border: 1px solid var(--footer-bg-color); /* Dynamic border color */
+    border-radius: 5px;
+    box-sizing: border-box; /* Ensure the padding and width are handled correctly */
+    margin-top: 50px; /* Adjust margin-top as needed */
+}
+
+#clear-icon {
+    position: absolute;
+    margin-top: 24px;
+    margin-left: -27px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    font-size: 18px;
+    color: var(--header-text-color); /* Dynamic color */
+    display: none; /* Hide by default */
+    font-weight: bolder;
+}
+
+/* Show the clear icon when input has content */
+#search-input:not(:placeholder-shown) + #clear-icon {
+    display: inline; /* Show the icon */
+}
+
+#instruction-icon {
+    position: relative; /* Ensure tooltip is positioned correctly relative to the icon */
+    cursor: pointer;
+    color: var(--footer2-bg-color); /* Professional color, can be customized */
+    font-size: 18px;
+    margin-left: 6px; /* Reduced margin for less space */
+}
+
+.tooltip-content {
+    position: absolute;
+    top: 100%; /* Position just below the icon */
+    left: 50%; /* Center horizontally relative to the icon */
+    transform: translateX(-50%); /* Center the tooltip horizontally */
+    margin-top: 6px; /* Reduced space between the icon and tooltip */
+    background: #5f5f5f; /* Dark background for contrast */
+    color: #f8f9fa; /* Light text color for readability */
+    padding: 4px 10px; /* Further reduced padding for a more compact look */
+    border-radius: 4px; /* Slightly smaller border radius */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Slightly less shadow */
+    font-size: 13px; /* Slightly smaller font size */
+    z-index: 1000; /* Ensure the tooltip is above other elements */
+    min-width: 120px; /* Adjusted for a more compact design */
+    line-height: 1.2; /* Reduced line height */
+    text-align: left;
+    white-space: pre-line; /* Preserve line breaks */
+    opacity: 0; /* Initially hidden */
+    visibility: hidden; /* Initially hidden */
+    transition: opacity 200ms ease, visibility 200ms ease; /* Faster transition */
+}
+
+#instruction-icon:hover + .tooltip-content {
+    opacity: 1; /* Ensure tooltip is visible on hover */
+    visibility: visible; /* Make tooltip visible on hover */
+}
+
+
+/* Staff Cards Section */
+.staff-cards {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin: 20px;
+    margin-top: 15px;
+}
+
+.card {
+   
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    margin: 15px auto; /* Adjust margin */
+    padding: 10px; /* Adjust padding */
+    text-align: center;
+    width: calc(100% - 40px); /* Accounts for padding and margins */
+    max-width: 600px;
+    height: 80px; /* Fixed height */
+}
+
+.card table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.card td {
+    vertical-align: middle;
+    padding: 5px;
+    text-align: center;
+}
+
+.img-cell {
+    width: 60px;
+}
+
+.name-cell {
+    width: 250px;
+    text-align: left;
+}
+
+.info-cell {
+    width: 200px;
+}
+
+.button-cell {
+    width: 140px;
+}
+
+.card img {
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+}
+
+.card h2 {
+    font-size: 18px;
+    margin: 0;
+}
+
+.card p {
+   
+    margin: 0;
+}
+
+.card button {
+    margin: 5px;
+    padding: 20 0 px;
+    border: none;
+    background-color: var(--button-bg-color); /* Dynamic background color */
+    color: var(--header-text-color); /* Dynamic text color */
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+/* Academic Programmes Section */
+.academic-programmes {
+    margin-top: -10px;
+    margin-left: 100px;
+    margin-right: 20px;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.academic-programmes h2 {
+    font-weight: bold;
+    margin-bottom: 40px;
+    font-size: 1.4rem;
+}
+
+.academic-programmes h1 {
+    font-weight: 1000; /* Extra bold */
+    font-size: 1.5rem;
+    margin: 10px 125px 40px auto; /* Center horizontally with auto margins */
+    margin-left: 100px;
+    
+}
+
+.programme-list {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    gap: 20px; /* Increase the gap between columns */
+}
+
+.programme-list ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    width: 45%; /* Decrease the width slightly to accommodate the larger gap */
+}
+
+.programme-list ul ul {
+    padding-left: 20px; /* Adds indentation to sublists */
+    margin-top: 5px;    /* Adds a small gap before the sublist */
+    list-style-type: disc; /* Changes bullet style for the sublist */
+}
+
+.programme-list ul li {
+    margin-bottom: 5px;
+    line-height: 2;
+    font-size: 1.2rem;
+    white-space: nowrap; /* Prevents line breaks */
+    overflow: hidden; /* Hides the overflow content */
+    text-overflow: ellipsis; /* Shows ellipsis if the text is too long */
+}
+
+.programme-list ul ul li {
+    margin-bottom: 5px; /* Adds space between sublist items */
+}
+
+.programme-list li {
+    margin-bottom: 5px;
+    line-height: 2;
+    font-size: 1.2rem;
+}
+
+/* Extra Styles */
+/* Hover list styling for both themes */
+.hover-list {
+    position: relative;
+}
+
+.hover-list li {
+    display: none;
+    position: relative;
+}
+
+.hover-list:hover li {
+    display: block;
+    transition: 100ms ease;
+}
+
+/* Hover effect for links */
+.hover-list a:hover {
+    transition: 100ms ease;
+    background-color: var(--hover-bg-color); /* Use dynamic variable for background */
+    border-radius: 5px;
+    padding: 5px;
+    border: none;
+}
+
+/* Dynamic link color for light and dark modes */
+a {
+    text-decoration: none;
+    color: var(--header-text-color); /* Dynamic link color */
+}
+
+/* Dark mode hover effect */
+[data-bs-theme="dark"] {
+    --hover-bg-color: #ffffff; /* Dark mode hover background color */
+    --hover-text-color: #000000; /* Dark mode hover text color */
+}
+
+/* Light mode hover effect */
+[data-bs-theme="light"] {
+    --hover-bg-color: #000000; /* Light mode hover background color */
+    --hover-text-color: #ffffdf; /* Light mode hover text color */
+}
+
+/* Apply the hover color based on the mode */
+.hover-list a:hover {
+    color: var(--hover-text-color); /* Dynamic text color */
+}
+
+/* Hover-list after effects */
+.hover-list:hover::after {
+    visibility: visible;
+    transform: scale(100) translateX(2px);
+}
+
+
+/* Staff List Section */
+.staff-list {
+    list-style-type: disc;
+    margin: 0;
+    padding-left: 20px;
+    display: block;
+}
+
+.staff-list li {
+    margin: 0;
+    padding-left: 0;
+}
+
+.staff-list a {
+    text-decoration: none;
+    color: inherit;
+}
+
+/* Policy on Research and Development Section */
+.policy-research-development {
+    margin: 200px;
+    width: 75%;
+    margin-top: -300px;
+    text-align: justify; /* Justify the text */
+
+}
+
+.policy-research-development h2 {
+    color: #000;
+    font-weight: 1000;
+    font-size: 1.5rem;
+    margin-bottom: 30px;
+    color: var(--header-text-color);
+}
+
+.policy-research-development .subheader {
+   
+    font-weight: 1000;
+    font-size: 1.5rem;
+    margin-bottom: 30px;
+    color: var(--main-text2-color);
+}
+
+.policy-research-development ul {
+    list-style-type: none; /* Remove default bullet points */
+    padding-left: 0;
+    color: var(--header-text-color);
+}
+
+.policy-research-development li {
+    margin: 10px 0;
+    font-size: 1.2rem;
+    color: #333; /* Darker text */
+    
+    position: relative;
+    line-height: 1.7; /* Ensures good spacing between lines */
+    margin-bottom: 20px;
+    color: var(--header-text-color) ;
+}
+
+.policy-research-development li i {
+    color: var(--main-text2-color); /* Icon color */
+    font-size: 1.2rem;
+    width: 18px;
+    margin-right: 10px; /* Adds spacing between the icon and the text */
+    vertical-align: middle; /* Aligns icon vertically with the text */
+}
+
+/* Mobile view (max-width: 768px) */
+@media screen and (max-width: 768px) {
+
+.search-bar {
+    margin: 40px 20px 20px;
+    text-align: center;
+}
+
+.search-bar input[type="text"] {
+    width: 70%;
+    padding: 10px;
+    border: 1px solid var(--footer-bg-color); /* Dynamic border color */
+    border-radius: 5px;
+    font-size: 0.7rem;
+}
+
+
+
+@media screen and (max-width: 768px) {
+    
+    h2{
+        font-weight: 800;
+        font-size: 1.1rem;
+    }
+    section.search-bar {
+        
+        margin-left: 20px;
+    }
+
+    .search-bar {
+        margin: 20px 10px 10px;
+        text-align: center;
+        position: relative;
+        
+    }
+
+    /* Staff Cards Section */
+    .staff-cards {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        margin: 10px;
+    }
+
+    .card {
+        
+        border: 1px solid #ccc;
+        border-radius: 10px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        margin: 10px 0;
+        padding: 10px;
+        text-align: center;
+        width: 85%;
+        max-width: 100%;
+    }
+
+    .card table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .card td {
+        vertical-align: middle;
+        padding: 5px;
+        text-align: center;
+    }
+
+    .img-cell {
+        width: 50px;
+    }
+
+    .name-cell {
+        width: 150px;
+        text-align: left;
+        font-size: 8px;
+    }
+
+    .info-cell {
+        width: 100px;
+        font-size: 8px;
+        
+    }
+
+    .button-cell {
+        width: 80px;
+    }
+
+    .card img {
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+    }
+
+    .card h2 {
+        font-size: 12px;
+        margin: 0;
+    }
+
+    .card p {
+        
+        font-size: 8px;
+        margin: 0;
+    }
+
+    .card button {
+        margin: 5px;
+        padding: 6px;
+        border: none;
+        background-color: var(--footer-bg-color); /* Dynamic background color */
+        color: white;
+        border-radius: 5px;
+        font-size: 10px;
+        cursor: pointer;
+    }
+
+    /* Academic Programmes Section */
+    .academic-programmes {
+        margin-top: 20px;
+        margin: 0 10px;
+        margin-left: 30px;
+    }
+
+    .container {
+        width: 100%;
+        margin: 0 auto;
+        padding: 0 10px;
+    }
+
+    .academic-programmes h2 {
+        font-weight: 800;
+        margin-bottom: 20px;
+        font-size: 1.2rem;
+    }
+    
+    .programme-list {
+        display: block;
+    }
+    
+    .programme-list ul {
+        list-style-type: none;
+        padding: 0;
+        margin: 0;
+        width: 100%;
+    }
+
+    .programme-list ul ul {
+        padding-left: 20px; /* Adds indentation to sublists */
+        margin-top: 5px;    /* Adds a small gap before the sublist */
+        list-style-type: disc; /* Changes bullet style for the sublist */
+    }
+
+    .programme-list ul li {
+        margin-bottom: 5px;
+        line-height: 2;
+        font-size: 0.9rem;
+        white-space: nowrap; /* Prevents line breaks */
+        overflow: hidden; /* Hides the overflow content */
+        text-overflow: ellipsis; /* Shows ellipsis if the text is too long */
+    }
+
+    .programme-list ul ul li {
+        margin-bottom: 5px; /* Adds space between sublist items */
+    }
+
+    .programme-list li {
+        margin-bottom: 5px;
+        line-height: 2;
+        font-size: 0.9rem;
+    }
+    #clear-icon {
+        
+        right: 22%; /* Adjust based on the input width to align properly inside */
+        
+    }
+    #instruction-icon {
+        position: relative; /* Ensure tooltip is positioned correctly relative to the icon */
+        cursor: pointer;
+        color: var(--footer2-bg-color); /* Professional color, can be customized */
+        font-size: 13px;
+        margin-left: 8px;
+    }
+    
+    .tooltip-content {
+        position: absolute;
+        top: 100%; /* Position just below the icon */
+        left: 80%; /* Center horizontally relative to the icon */
+        transform: translateX(-50%); /* Center the tooltip horizontally */
+        margin-left: -20px;
+        margin-top: 5px; /* Space between the icon and tooltip */
+        background: #5f5f5f; /* Dark background for contrast */
+        color: #f8f9fa; /* Light text color for readability */
+        padding: 10px; /* Reduced padding for a more compact look */
+        border-radius: 5px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Subtle shadow */
+        font-size: 13px;
+        z-index: 1000; /* Ensure the tooltip is above other elements */
+        min-width: 180px; /* Adjusted for a more compact design */
+        line-height: 1.4; /* Adjusted line height for better spacing */
+        text-align: left;
+        white-space: pre-line; /* Preserve line breaks */
+        opacity: 0; /* Initially hidden */
+        visibility: hidden; /* Initially hidden */
+        transition: opacity 300ms ease, visibility 300ms ease; /* Transition for opacity and visibility */
+    }
+    .tooltip-content h6 {
+        font-size: 0.7rem;
+    }
+    
+    .notification {
+        padding: 8px 15px; /* Reduce padding */
+        font-size: 12px; /* Smaller font size */
+        max-width: 95%; /* Increase width on smaller screens */
+    }
+
+    .notification__icon,
+    .notification__close {
+        font-size: 14px; /* Smaller icon and close button size */
+    }
+
+    .notification__title {
+        font-size: 12px; /* Smaller title font size */
+    }
+    .academic-programmes h1 {
+        font-weight: 700; /* Extra bold */
+        font-size: 1.3rem;
+       
+    }
+    /* Policy on Research and Development Section */
+.policy-research-development {
+    margin: 20px;
+    width: 90%;
+    margin-top: -450px;
+    text-align: justify; /* Justify the text */
+
+}
+
+
+.policy-research-development h2 {
+    color: #000;
+    font-weight: 800;
+    font-size: 1.2rem;
+    margin-bottom: 30px;
+    color: var(--header-text-color);
+}
+
+.policy-research-development .subheader {
+   
+    font-weight: 800;
+    font-size: 1.2rem;
+    margin-bottom: 20px;
+    color: var(--main-text2-color);
+}
+
+.policy-research-development ul {
+    list-style-type: none; /* Remove default bullet points */
+    padding-left: 0;
+    color: var(--header-text-color);
+}
+
+.policy-research-development li {
+    margin: 10px 0;
+    font-size: 0.9rem;
+    color: #333; /* Darker text */
+    
+    position: relative;
+    line-height: 1.7; /* Ensures good spacing between lines */
+    margin-bottom: 20px;
+    color: var(--header-text-color) ;
+}
+
+.policy-research-development li i {
+    color: var(--main-text2-color); /* Icon color */
+    font-size: 0.9em;
+    width: 18px;
+    margin-right: 10px; /* Adds spacing between the icon and the text */
+    vertical-align: middle; /* Aligns icon vertically with the text */
+}
+   
+.academic-programmes h1 {
+    font-weight: 800; /* Extra bold */
+    font-size: 1.1rem;
+   width: 90%;
+    margin-left: -10px;
+    
+}
+
+}
+}
+
+

@@ -1,0 +1,105 @@
+{% extends 'layout.html' %}
+
+{% block title %}Staff Login{% endblock %}
+
+{% block extra_styles %}
+  <!-- Link to your external stylesheet -->
+  <link href="{{ url_for('static', filename='css/login.css') }}" rel="stylesheet" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+{% endblock %}
+
+
+{% block content %}
+
+<div class="notification hide" id="notification">
+    <div class="notification__icon" id="notification-icon">
+        <!-- Icons will be dynamically inserted here -->
+    </div>
+    <div class="notification__title" id="notification-title"></div>
+    <div class="notification__close" id="notification-close">
+        <span class="material-icons">close</span>
+    </div>
+</div>
+
+   
+<div class="content">
+    <div class="login-container">
+        <h2>STAFF LOGIN</h2></br>
+        <form action="{{ url_for('login') }}" method="post" class="login-form">
+            <input type="email" id="email" name="email" placeholder="Email" required></br>
+            <input type="password" id="password" name="password" placeholder="Password" required></br>
+            <button type="submit" class="btn-custom">Login</button>
+        </form>
+    </div>
+</div>
+
+<script>
+    function showNotification(message, type = 'error') {
+const notification = document.getElementById('notification');
+const notificationTitle = document.getElementById('notification-title');
+const notificationIcon = document.getElementById('notification-icon');
+
+// Reset classes before applying new ones
+notification.className = 'notification hide'; // Reset class list to hide the notification first
+notificationTitle.textContent = message;
+
+// Clear any existing icon
+notificationIcon.innerHTML = '';
+
+// Insert the appropriate icon based on the type
+if (type === 'success') {
+    notificationIcon.innerHTML = `
+        <span class="material-icons" style="color: #155724;">check_circle</span>`;
+} else if (type === 'error') {
+    notificationIcon.innerHTML = `
+        <span class="material-icons" style="color: #721c24;">error</span>`;
+}
+
+// Add the type-specific class
+notification.classList.add(type);
+
+// Make the notification visible
+notification.classList.remove('hide');
+notification.classList.add('show');
+
+setTimeout(() => {
+    // Start hiding the notification
+    notification.classList.remove('show');
+    notification.classList.add('hide');
+
+    setTimeout(() => {
+        notification.style.display = 'none'; // Hide the notification after animation
+    }, 500); // Delay to match the transition duration
+}, 5000); // Hide after 5 seconds
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+// Parse flashed messages from Flask
+const messages = JSON.parse('{{ get_flashed_messages(with_categories=True) | tojson | safe }}');
+
+// Check if there are any messages to display
+if (messages.length > 0) {
+    messages.forEach(msg => {
+        showNotification(msg[1], msg[0]); // Show each message with its type
+    });
+} else {
+    const notification = document.getElementById('notification');
+    notification.style.display = 'none'; // Ensure hidden if no messages
+}
+});
+
+// Handle close button click to manually hide notification
+document.getElementById('notification-close').addEventListener('click', () => {
+const notification = document.getElementById('notification');
+notification.classList.remove('show');
+notification.classList.add('hide');
+
+setTimeout(() => {
+    notification.style.display = 'none'; // Hide the notification after animation
+}, 500); // Delay to match the transition duration
+});
+
+</script>
+
+
+{% endblock %}

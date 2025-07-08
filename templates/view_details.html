@@ -1,0 +1,420 @@
+{% extends 'layout.html' %} {% block title %}{{ details.name }}'s Profile{%
+  endblock %} {% block extra_styles %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/view_details.css') }}" />
+  <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
+  <script src="https://unpkg.com/boxicons@2.1.4/dist/boxicons.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  
+  
+  <style>
+    /* Light Theme Variables */
+  [data-bs-theme="light"] {
+      --header2-bg-color: {{ colors.header_color }};
+      --sidebar2-bg-color: {{ colors.sidebar_color }};
+  }
+  
+  /* Dark Theme Variables */
+  [data-bs-theme="dark"] {
+      --header2-bg-color: #575757; /* Cement color for dark theme */
+      --sidebar2-bg-color: #575757; /* Cement color for dark theme */
+  }
+  
+    /* Dark Theme Variables */
+    [data-bs-theme="dark"] {
+      --header2-bg-color: #575757;
+      /* Cement color for dark theme */
+      --sidebar2-bg-color: #575757;
+      /* Cement color for dark theme */
+    }
+  
+    /* Base Styles */
+    .custom-header {
+      background-color: var(--header2-bg-color);
+      border-radius: 7px;
+      padding: 20px;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+    }
+  
+    .sidebar {
+      background-color: var(--sidebar2-bg-color);
+      border-radius: 7px;
+      padding: 10px;
+    }
+    
+  </style>
+  
+  
+  {% endblock %}
+  
+  
+  {% block content %}
+  
+  <div class="container1">
+    <div class="custom-header">
+      <div class="contact-info">
+        <h1>{{ details.name }}</h1>
+        <p>{{ details.Title }}</p>
+        <p>{{ details.department }}</p>
+        
+  
+      </div>
+      <div class="profile-picture">
+        {% if details.profile_picture %}
+        <img src="{{ url_for('static', filename='uploads/' ~ details.profile_picture) }}" alt="Profile Picture" />
+        {% else %}
+        <img src="{{ url_for('static', filename='uploads/default.webp') }}" alt="Default Profile Picture" />
+        {% endif %}
+      </div>
+    </div>
+  
+    <div class="main-container1">
+      <div class="leftbar">
+        {% if details.education %}
+        <div class="section">
+          <h2>Education</h2>
+          <ul class="edu-container">
+            {% for item in details.education %}
+            <li>{{ item.degree }} - {{ item.college }} - {{ item.duration }}</li>
+            {% endfor %}
+          </ul>
+        </div>
+        {% endif %}
+  
+        {% if details.career_highlights %}
+        <div class="section">
+          <h2>Career Highlights</h2>
+          <ul>
+            {% for highlight in details.career_highlights %}
+            <li>{{ highlight }}</li>
+            {% endfor %}
+          </ul>
+        </div>
+        {% endif %}
+  
+  
+        {% if details.research_areas %}
+        <div class="section">
+          <h2>Research Areas</h2>
+          <ul class="research-conx">
+            {% for area in details.research_areas %}
+           <li >{{ area }}</li>
+
+            {% endfor %}
+          </ul>
+        </div>
+        {% endif %}
+  
+        {% if details.publications %}
+<div class="section">
+  <h2> Research Publications</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Month & Year</th>
+        <th>Type</th>
+        <th>Title of Publication</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for item in details.publications %}
+      <tr>
+        <td>{{ item.date }}</td>
+        <td>{{ item.type }}</td>
+        <td>
+          {% if item.link %}
+          <a href="{{ item.link }}" target="_blank" class="publication-title">
+            {{ item.title }}
+            <i class="fas fa-external-link-alt"></i> <!-- Icon indicating it's a clickable link -->
+          </a>
+          {% else %}
+          {{ item.title }}
+          {% endif %}
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endif %}
+
+  
+  
+{% if details.funding %}
+  <div class="section">
+  
+      <!-- Check if there are any Completed Research Projects -->
+      {% set completed_projects = details.funding | selectattr('status', 'equalto', 'completed') | list %}
+      {% if completed_projects %}
+      <!-- Table for Completed Funding -->
+      <h2>Completed Research Projects</h2>
+      <table>
+          <thead>
+              <tr>
+                  <th class="fund-date">Month & Year</th>
+                  <th class="fund-title">Title of the Project</th>
+                  <th class="fund-agency">Funding Agency</th>
+                  <th class="fund-amount">Amount of Grant</th>
+              </tr>
+          </thead>
+          <tbody>
+              {% for item in completed_projects %}
+                  <tr>
+                      <!-- Display Month & Year -->
+                      <td class="fund-date">{{ item.year }}</td>
+                      <td class="fund-title">{{ item.project_title }}</td>
+                      <td class="fund-agency">{{ item.funding_agency }}</td>
+                      <td class="fund-amount">{{ item.amount | indian_format }}</td>
+                  </tr>
+              {% endfor %}
+          </tbody>
+      </table>
+      {% endif %}
+  
+      <!-- Check if there are any Ongoing Research Projects -->
+      {% set ongoing_projects = details.funding | selectattr('status', 'equalto', 'ongoing') | list %}
+      {% if ongoing_projects %}
+      <!-- Table for Ongoing Funding -->
+      <h2>Ongoing Research Projects</h2>
+      <table>
+          <thead>
+              <tr>
+                  <th class="fund-date">Month & Year</th>
+                  <th class="fund-title">Title of the Project</th>
+                  <th class="fund-agency">Funding Agency</th>
+                  <th class="fund-amount">Amount of Grant</th>
+              </tr>
+          </thead>
+          <tbody>
+              {% for item in ongoing_projects %}
+                  <tr>
+                      <!-- Display Month & Year -->
+                      <td class="fund-date">{{ item.year }}</td>
+                      <td class="fund-title">{{ item.project_title }}</td>
+                      <td class="fund-agency">{{ item.funding_agency }}</td>
+                      <td class="fund-amount">{{ item.amount | indian_format }}</td>
+                  </tr>
+              {% endfor %}
+          </tbody>
+      </table>
+      {% endif %}
+  
+  </div>
+{% endif %}
+
+  
+{% if details.resource_person %}
+<div class="section">
+  <h2>Resource Person</h2>
+  <table>
+    <tbody>
+      {% for item in details.resource_person %}
+      <tr>
+        <td class="resource_person-date">{{ item.date }}</td>
+        <td class="resource_person-topic">{{ item.topic }} - {{ item.department_ }}</td>
+   
+        
+        
+    </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endif %}
+  
+  {% if details.conferences %}
+  <div class="section">
+    <h2>Conferences Attended</h2>
+    <table>
+      <tbody>
+        {% for item in details.conferences %}
+        <tr>
+          <td class="conferences-year">{{ item.year }}</td>
+          <td class="conferences-type">{{ item.type }} - {{ item.title_of_paper }} - {{ item.isbn }} - {{ item.details }}</td>
+          
+          
+      </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% endif %}
+  
+  
+  
+  
+  
+      </div>
+  
+      <div class="sidebar">
+        <div class="section">
+          <h2>Personal Information</h2>
+          <p class="icons">
+            <i class="bx bx-envelope icons"></i>
+            <a href="mailto:{{ details.email }}">{{ details.email }} </a>
+          </p>
+          <p class="icons">
+            <i class="bx bx-envelope icons"></i>
+            <a href="mailto:{{ details.email }}">{{ details.alternative_email }} </a>
+          </p>
+          <p class="icons">
+            <i class="bx bx-current-location icons"></i> {{ details.address }}
+          </p>
+          {% if details.website %}
+          <p class="icons">
+            <i class="bx bx-globe icons"></i>
+            <a href="{{ details.website }}" target="_blank">{{ details.website }}</a>
+          </p>
+          {% endif %}
+          <p class="icons">
+            <i class="bx bxs-phone icons"></i> {{ details.phone }}
+          </p>
+        </div>
+  
+        {% if details.research_career %}
+        <div class="section" >
+          <h2>Research Career</h2>
+          
+            {% for career in details.research_career %}
+            <div class="no">{{ career }}</div>
+            {% endfor %}
+          
+        </div>
+        {% endif %}
+  
+        {% if details.research_ids %}
+  <div class="section">
+    <h2>Research IDs</h2>
+    <ul>
+      {% for item in details.research_ids %}
+      <li>
+        {% if item.id %}
+        <a href="{{ item.id }}" target="_blank" class="research-id-title">
+          {{ item.title }} 
+          <i class="fas fa-external-link-alt"></i>
+        </a>
+        {% else %}
+        {{ item.title }}
+        {% endif %}
+      </li>
+      {% endfor %}
+    </ul>
+  </div>
+  {% endif %}
+  
+  
+  
+  
+  
+        {% if details.collab %}
+        <div class="section">
+          <h2>Inter-Disciplinary Collaboration</h2>
+         
+            {% for career in details.collab %}
+            <div class="no">{{ career }}</div>
+            {% endfor %}
+         
+        </div>
+        {% endif %}
+  
+        {% if details.consultancy %}
+        <div class="section">
+          <h2>Areas of Consultancy</h2>
+          <ul>
+            {% for consultancy in details.consultancy %}
+            <li>{{ consultancy }}</li>
+            {% endfor %}
+          </ul>
+        </div>
+        {% endif %}
+  
+        {% if details.administrative_position %}
+        <div class="section">
+          <h2>Administrative Positions </h2>
+          <ul>
+            {% for item in details.administrative_position %}
+            <li>{{ item.position }} ({{ item.year_from }} - {{ item.year_to}})</li>
+            {% endfor %}
+          </ul>
+        </div>
+        {% endif %}
+  
+        {% if details.honorary_positions %}
+        <div class="section">
+          <h2>Honorary Positions </h2>
+          <ul>
+            {% for item in details.honorary_positions %}
+            <li>{{ item.position }} ({{ item.year }})</li>
+            {% endfor %}
+          </ul>
+        </div>
+        {% endif %}
+  
+        {% if details.phd_scholars_produced or details.phd_scholars_registered %}
+        <div class="section">
+          <h2>Research Supervisor</h2>
+          <ul>
+            {% if details.phd_scholars_produced %}
+            <li>Scholars Produced - {{ details.phd_scholars_produced }}</li>
+            {% endif %}
+            {% if details.phd_scholars_registered %}
+            <li>Scholars Currently Registered - {{ details.phd_scholars_registered }}</li>
+            {% endif %}
+          </ul>
+        </div>
+        {% endif %}
+      </div>
+  
+    </div>
+  </div>
+   <!-- Button container for horizontal centering -->
+   <div class="button-container" style="margin-bottom: 20px;">
+    <button onclick="window.history.back()">Go Back</button>
+</div>
+
+
+  
+  <style>
+    /* Existing styles */
+    button {
+        padding: 15px 15px;
+        font-size: 14px;
+        width: 10%;
+        background-color: #5f5f5f; /* Blue background */
+        color: white;
+        border: none;
+        border-radius: 8px;  /* Rounded corners */
+        cursor: pointer;
+        transition: background-color 0.3s ease; /* Smooth transition for hover effect */
+       
+        /* Keep existing styles for the button */
+    }
+
+    /* Button hover effect */
+    button:hover {
+        background-color: #313131; /* Darker blue when hovered */
+    }
+
+    /* Button focus effect */
+    button:focus {
+        outline: none; /* Remove outline when clicked */
+    }
+
+    /* Center the button horizontally without affecting body/html */
+    .button-container {
+        width: 100%;  /* Full width */
+        display: flex; /* Use flexbox */
+        justify-content: center; /* Horizontally center the button */
+    }
+     /* Responsive styling for mobile screens */
+     @media (max-width: 600px) {
+        button {
+            width: 40%;       /* Expand button width for smaller screens */
+            font-size: 16px;  /* Slightly larger font for readability on small screens */
+            padding: 12px;    /* Adjust padding */
+        }
+    }
+</style>
+  {% endblock %}

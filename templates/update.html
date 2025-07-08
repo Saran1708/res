@@ -1,0 +1,1177 @@
+{% extends 'layout.html' %}
+
+{% block title %}Update Details{% endblock %}
+
+{% block extra_styles %}
+<!-- Link to your external stylesheet -->
+<link rel="stylesheet" href="{{ url_for('static', filename='css/update.css') }}">
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+
+
+<!-- Include Cropper.js CSS -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css">
+
+<style>
+    .modal-body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 70vh;
+        /* Increase modal height */
+        padding: 0;
+        /* Remove padding for better image alignment */
+    }
+
+    #crop-image {
+        max-width: 100%;
+        /* Ensure image doesn't overflow */
+        max-height: 100%;
+        /* Ensure image doesn't overflow */
+        object-fit: contain;
+        /* Maintain aspect ratio */
+    }
+
+    .modal-footer {
+        justify-content: space-between;
+        /* Align buttons to the left and right */
+    }
+</style>
+
+{% endblock %}
+
+{% block signin_status %}
+<li>
+    <form action="{{ url_for('logout') }}" method="post" class="login-form">
+        <button type="submit" class="dropdown-item login-button">LOGOUT</button>
+    </form>
+</li>
+{% endblock %}
+
+{% block content %}
+
+
+<div class="notification hide" id="notification">
+    <div class="notification__icon" id="notification-icon">
+        <!-- Icons will be dynamically inserted here -->
+    </div>
+    <div class="notification__title" id="notification-title"></div>
+    <div class="notification__close" id="notification-close">
+        <span class="material-icons">close</span>
+    </div>
+</div>
+<div class="content">
+    <div class="login-container">
+
+
+        <form action="{{ url_for('update_profile', email=staff['email']) }}" method="POST"
+            enctype="multipart/form-data">
+            <!-- Include the staff ID (hidden) -->
+            <input type="hidden" name="id" value="{{ staff.id }}">
+            <div class="form-section">
+                <h2>Personal Information</h2></br>
+                <div class="form-group">
+                    <select name="title2" id="title2" class="form-control" required data-toggle="tooltip"
+                        data-placement="top" title2="Select your title">
+                        <option value="" disabled>Select your title</option>
+                        <option value="Dr" {% if staff.title=='Dr' %}selected{% endif %}>Dr</option>
+                        <option value="Mr" {% if staff.title=='Mr' %}selected{% endif %}>Mr</option>
+                        <option value="Ms" {% if staff.title=='Ms' %}selected{% endif %}>Ms</option>
+                        <option value="Mrs" {% if staff.title=='Mrs' %}selected{% endif %}>Mrs</option>
+                    </select>
+                </div>
+
+                <!-- Name Input -->
+                <div class="form-group">
+                    <input type="text" name="name" id="name" value="{{ staff.name }}" class="form-control"
+                        placeholder="Full Name" required data-toggle="tooltip" data-placement="top"
+                        title="Enter your full name as it appears on official documents.">
+                </div>
+
+                <div class="form-group">
+                    <select name="department" class="form-control" required data-toggle="tooltip" data-placement="top"
+                        title="Select your Department.">
+                        <option value="" disabled selected>Select Department</option>
+                        <optgroup label="Aided Stream">
+                            <option value="English - Aided" {{ 'selected' if staff.department=='English - Aided' else ''
+                                }}>English</option>
+                            <option value="Tamil - Aided" {{ 'selected' if staff.department=='Tamil - Aided' else '' }}>
+                                Tamil</option>
+                            <option value="Languages - Aided" {{ 'selected' if staff.department=='Languages - Aided'
+                                else '' }}>Languages</option>
+                            <option value="History - Aided" {{ 'selected' if staff.department=='History - Aided' else ''
+                                }}>History</option>
+                            <option value="Political Science - Aided" {{ 'selected' if
+                                staff.department=='Political Science - Aided' else '' }}>Political Science</option>
+                            <option value="Public Administration - Aided" {{ 'selected' if
+                                staff.department=='Public Administration - Aided' else '' }}>Public Administration
+                            </option>
+                            <option value="Economics - Aided" {{ 'selected' if staff.department=='Economics - Aided'
+                                else '' }}>Economics</option>
+                            <option value="Philosophy - Aided" {{ 'selected' if staff.department=='Philosophy - Aided'
+                                else '' }}>Philosophy</option>
+                            <option value="Commerce - Aided" {{ 'selected' if staff.department=='Commerce - Aided'
+                                else '' }}>Commerce</option>
+                            <option value="Social Work - Aided" {{ 'selected' if staff.department=='Social Work - Aided'
+                                else '' }}>Social Work</option>
+                            <option value="Mathematics - Aided" {{ 'selected' if staff.department=='Mathematics - Aided'
+                                else '' }}>Mathematics</option>
+                            <option value="Statistics - Aided" {{ 'selected' if staff.department=='Statistics - Aided'
+                                else '' }}>Statistics</option>
+                            <option value="Physics - Aided" {{ 'selected' if staff.department=='Physics - Aided' else ''
+                                }}>Physics</option>
+                            <option value="Chemistry - Aided" {{ 'selected' if staff.department=='Chemistry - Aided'
+                                else '' }}>Chemistry</option>
+                            <option value="Botany - Aided" {{ 'selected' if staff.department=='Botany - Aided' else ''
+                                }}>Botany</option>
+                            <option value="Zoology - Aided" {{ 'selected' if staff.department=='Zoology - Aided' else ''
+                                }}>Zoology</option>
+                            <option value="Physical Education - Aided" {{ 'selected' if
+                                staff.department=='Physical Education - Aided' else '' }}>Physical Education</option>
+                        </optgroup>
+                        <optgroup label="Self-Financed Stream">
+                            <option value="English - SFS" {{ 'selected' if staff.department=='English - SFS' else '' }}>
+                                English</option>
+                            <option value="Tamil - SFS" {{ 'selected' if staff.department=='Tamil - SFS' else '' }}>
+                                Tamil</option>
+                            <option value="Languages - SFS" {{ 'selected' if staff.department=='Languages - SFS' else ''
+                                }}>Languages</option>
+                            <option value="Journalism - SFS" {{ 'selected' if staff.department=='Journalism - SFS'
+                                else '' }}>Journalism</option>
+                            <option value="Social Work - SFS" {{ 'selected' if staff.department=='Social Work - SFS'
+                                else '' }}>Social Work</option>
+                            <option value="Commerce - SFS" {{ 'selected' if staff.department=='Commerce - SFS' else ''
+                                }}>Commerce</option>
+                            <option value="Business Administration - SFS" {{ 'selected' if
+                                staff.department=='Business Administration - SFS' else '' }}>Business Administration
+                            </option>
+                            <option value="Communication - SFS" {{ 'selected' if staff.department=='Communication - SFS'
+                                else '' }}>Communication</option>
+                            <option value="Geography - SFS" {{ 'selected' if staff.department=='Geography - SFS' else ''
+                                }}>Geography</option>
+                            <option value="Tourism Studies - SFS" {{ 'selected' if
+                                staff.department=='Tourism Studies - SFS' else '' }}>Tourism Studies</option>
+                            <option value="Mathematics - SFS" {{ 'selected' if staff.department=='Mathematics - SFS'
+                                else '' }}>Mathematics</option>
+                            <option value="Physics - SFS" {{ 'selected' if staff.department=='Physics - SFS' else '' }}>
+                                Physics</option>
+                            <option value="Chemistry - SFS" {{ 'selected' if staff.department=='Chemistry - SFS' else ''
+                                }}>Chemistry</option>
+                            <option value="Microbiology - SFS" {{ 'selected' if staff.department=='Microbiology - SFS'
+                                else '' }}>Microbiology</option>
+                            <option value="Computer Application (BCA) - SFS" {{ 'selected' if
+                                staff.department=='Computer Application (BCA) - SFS' else '' }}>Computer Application
+                                (BCA)</option>
+                            <option value="Computer Science (B.Sc) - SFS" {{ 'selected' if
+                                staff.department=='Computer Science (B.Sc) - SFS' else '' }}>Computer Science (B.Sc)
+                            </option>
+                            <option value="Computer Science (MCA) - SFS" {{ 'selected' if
+                                staff.department=='Computer Science (MCA) - SFS' else '' }}>Computer Science (MCA)
+                            </option>
+                            <option value="Visual Communication - SFS" {{ 'selected' if
+                                staff.department=='Visual Communication - SFS' else '' }}>Visual Communication</option>
+                            <option value="Physical Education, Health Education and Sports - SFS" {{ 'selected' if
+                                staff.department=='Physical Education, Health Education and Sports - SFS' else '' }}>
+                                Physical Education, Health Education and Sports</option>
+                            <option value="Psychology - SFS" {{ 'selected' if staff.department=='Psychology - SFS'
+                                else '' }}>Psychology</option>
+                            <option value="Data Science - SFS" {{ 'selected' if staff.department=='Data Science - SFS'
+                                else '' }}>Data Science</option>
+                        </optgroup>
+                        <optgroup label="Units">
+                            <option value="MCC - MRF Innovation Park" {{ 'selected' if
+                                staff.department=='MCC - MRF Innovation Park' else '' }}>MCC - MRF Innovation Park
+                            </option>
+                        </optgroup>
+                    </select>
+
+                </div>
+                <div class="form-group">
+
+                    <select id="designation" name="Title" class="form-control" required data-toggle="tooltip"
+                        data-placement="top" title="Select your Designation.">
+                        <option value="" disabled>Select your Designation</option>
+                        <option value="Assistant Professor" {% if staff.Title=="Assistant Professor" %}selected{% endif
+                            %}>Assistant Professor</option>
+                        <option value="Associate Professor" {% if staff.Title=="Associate Professor" %}selected{% endif
+                            %}>Associate Professor</option>
+                        <option value="Others" {% if staff.Title !="Assistant Professor" and staff.Title
+                            !="Associate Professor" %}selected{% endif %}>Others</option>
+                    </select>
+                </div>
+
+                <div class="form-group" id="other-designation-group"
+                    style="{% if staff.Title != 'Assistant Professor' and staff.Title != 'Associate Professor' %}display: block;{% else %}display: none;{% endif %}">
+                    <input type="text" id="other-designation" name="OtherTitle"
+                        value="{% if staff.Title != 'Assistant Professor' and staff.Title != 'Associate Professor' %}{{ staff.Title }}{% endif %}"
+                        class="form-control" placeholder="Enter your Designation" data-toggle="tooltip"
+                        data-placement="top" title="Specify your Designation.">
+                </div>
+
+                <script>
+                    const designationDropdown = document.getElementById('designation');
+                    const otherDesignationGroup = document.getElementById('other-designation-group');
+                    const otherDesignationInput = document.getElementById('other-designation');
+
+                    // Handle change event on the dropdown
+                    designationDropdown.addEventListener('change', function () {
+                        if (this.value === 'Others') {
+                            otherDesignationGroup.style.display = 'block';
+                            otherDesignationInput.required = true;
+                        } else {
+                            otherDesignationGroup.style.display = 'none';
+                            otherDesignationInput.required = false;
+                        }
+                    });
+                </script>
+
+                <div class="form-group">
+                    <input type="text" name="institution" value="{{ staff.institution }}" class="form-control"
+                        placeholder="Institution" required data-toggle="tooltip" data-placement="top"
+                        title="Enter your affiliated institution.">
+                </div>
+
+                <div class="form-group">
+
+                    <select name="department_order" id="departmentOrder" class="form-control" required
+                        data-toggle="tooltip" data-placement="top"
+                        title="Choose your order in the department according to the attendance register.">
+                        <option value="" disabled>Choose your order in the department according to the attendance
+                            register.</option>
+                        {% for i in range(1, 21) %}
+                        <option value="{{ i }}" {% if staff.department_order==i %}selected{% endif %}>{{ i }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+
+                <div class="form-group">
+                    <input type="email" name="alternative_email" class="form-control"
+                        value="{{ staff.alternative_email }}" placeholder="Alternative Email" required
+                        data-toggle="tooltip" data-placement="top" title="Enter your alternative email address.">
+                </div>
+
+
+                <div class="form-group">
+                    <input type="tel" name="phone" class="form-control" value="{{ staff.phone }}" placeholder="Phone"
+                        required data-toggle="tooltip" data-placement="top" title="Enter your phone number.">
+                </div>
+                <div class="form-group">
+                    <input type="text" name="address" value="{{ staff.address }}" class="form-control"
+                        placeholder="Address" required data-toggle="tooltip" data-placement="top"
+                        title="Enter your residential address.">
+                </div>
+                <div class="form-group">
+                    <input type="url" name="website" value="{{ staff['website'] or '' }}" class="form-control"
+                        placeholder="Website" data-toggle="tooltip" data-placement="top"
+                        title="Enter your personal or professional website URL.">
+                </div>
+
+                <div class="form-group">
+                    <!-- File Input for Profile Picture -->
+                    <input type="file" name="profile_picture" class="form-control" id="profile_picture" accept="image/*"
+                        data-toggle="tooltip" data-placement="top" title="Upload a profile picture." {% if
+                        staff.profile_picture %} disabled {% endif %}>
+
+                    <!-- Display Current Profile Picture and Remove Button -->
+                    <div id="profile-picture-container">
+                        {% if staff.profile_picture %}
+                        <img id="current-picture"
+                            src="{{ url_for('static', filename='uploads/' + staff.profile_picture) }}"
+                            alt="Profile Picture" width="100" style="vertical-align: middle;">
+                        <button type="button" id="remove-profile-picture" class="btn btn-danger"
+                            style="vertical-align: middle;">Remove</button>
+                        <input type="hidden" name="remove_profile_picture" id="remove_profile_picture" value="">
+                        {% else %}
+                        <p>No profile picture available</p>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <!-- Modal for Image Cropping -->
+                <div class="modal fade" id="cropModal" tabindex="-1" aria-labelledby="cropModalLabel"
+                    aria-hidden="true">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="cropModalLabel">Crop Image</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <img id="crop-image" src="" alt="Image Preview">
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                <button type="button" id="crop-button" class="btn btn-primary"
+                                    onclick="cropImage()">Crop Image</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="form-group">
+                    <textarea name="research_areas" class="form-control" placeholder="Research Areas" rows="5"
+                        data-toggle="tooltip" data-placement="top"
+                        title="Enter your research areas. Separate each area with a new line.">{{ ', '.join(staff.research_areas) if staff.research_areas else '' }}</textarea>
+                </div>
+            </div></br>
+
+
+            <!-- Career Highlights Section -->
+            <div class="form-section">
+                <h4>Career Highlights</h4>
+                <div class="form-group">
+                    <textarea name="career_highlights" class="form-control" placeholder="Career Highlights" rows="5"
+                        data-toggle="tooltip" data-placement="top"
+                        title="Enter your career highlights. Separate each highlight with a new line."
+                        id="careerHighlights"
+                        oninput="updateCount('careerHighlights', 'careerCount', 500);">{{ '\n'.join(staff.career_highlights) }}</textarea>
+                    <div class="char-count" id="careerCount">0/500</div>
+                    <div id="careerError" class="error-message" style="color: red; display: none;">Exceeded character
+                        limit!</div>
+                </div>
+            </div><br>
+
+            <!-- Research Career Section -->
+            <div class="form-section">
+                <h4>Research Career</h4>
+                <div class="form-group">
+                    <textarea name="research_career" class="form-control" placeholder="Research Career" rows="5"
+                        data-toggle="tooltip" data-placement="top"
+                        title="Enter your research career details. Separate each detail with a new line."
+                        id="researchCareer"
+                        oninput="updateCount('researchCareer', 'researchCount', 500);">{{ '\n'.join(staff.research_career) }}</textarea>
+                    <div class="char-count" id="researchCount">0/500</div>
+                    <div id="researchError" class="error-message" style="color: red; display: none;">Exceeded character
+                        limit!</div>
+                </div>
+            </div><br>
+
+
+            <div class="form-section">
+                <h4>Areas of Consultancy</h4>
+                <div class="form-group">
+                    <textarea name="consultancy" class="form-control" placeholder="Consultancy details" rows="5"
+                        data-toggle="tooltip" data-placement="top"
+                        title="Enter your consultancy details. Separate each point with a new line.">{{ '\n'.join(staff.consultancy) }}</textarea>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h4>Areas of Inter-Disciplinary collaboration</h4>
+                <div class="form-group">
+                    <textarea name="collab" class="form-control" placeholder="Inter-Disciplinary collaboration" rows="5"
+                        data-toggle="tooltip" data-placement="top"
+                        title="Enter your Inter-Disciplinary collaboration. Separate each highlight with a new line.">{{ '\n'.join(staff.collab) }}</textarea>
+                </div>
+            </div></br>
+
+            <div class="form-section">
+                <h4>Research Supervisor</h4>
+                <!-- Radio buttons for Yes/No selection -->
+                <div class="form-group">
+                    <label>
+                        <input type="radio" name="research_supervisor" id="supervisor-yes" value="yes"> Yes
+                    </label>
+                    <label class="ml-3">
+                        <input type="radio" name="research_supervisor" id="supervisor-no" value="no"> No
+                    </label>
+                </div></br>
+
+
+                <!-- PhD Scholars section (initially hidden) -->
+                <!-- PhD Scholars section (initially hidden) -->
+                <div id="phd-section" style="display: none;">
+                    <h4>Details of PhD Scholars</h4>
+
+                    <!-- Input fields for number of PhD scholars -->
+                    <div class="form-group">
+                        <input type="number" name="phd_scholars_produced" id="phd_scholars_produced"
+                            value="{{ staff.phd_scholars_produced }}" class="form-control mt-2"
+                            placeholder="No. of PhD Scholars Produced">
+                        <input type="number" name="phd_scholars_registered" id="phd_scholars_registered"
+                            value="{{ staff.phd_scholars_registered }}" class="form-control mt-2"
+                            placeholder="No. of PhD Scholars Currently Registered">
+                    </div>
+
+                    <!-- Dynamic section for PhD Scholar details -->
+                    <div id="phd-scholars-section" class="dynamic-section"></div>
+                    <button type="button" class="btn btn-primary add-btn" id="add-phd-scholar">Add PhD Scholar
+                        Details</button>
+                </div>
+            </div></br>
+
+
+            <div class="form-container">
+                <!-- Education Section -->
+                <div class="form-section" id="education_container">
+                    <h4>Education</h4>
+                    <div class="form-content">
+                        {% for item in staff.education %}
+                        <div class="form-group">
+                            <input type="text" name="education_degree_{{ loop.index }}" value="{{ item.degree }}"
+                                placeholder="Degree" class="form-control">
+                            <input type="text" name="education_college_{{ loop.index }}" value="{{ item.college }}"
+                                placeholder="College" class="form-control">
+                            <input type="number" name="education_duration_{{ loop.index }}" value="{{ item.duration }}"
+                                placeholder="Year of Completion" class="form-control">
+                            <button type="button" class="btn btn-danger remove-btn"
+                                onclick="removeField(this)">Remove</button>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    <button type="button" class="btn btn-primary add-btn"
+                        onclick="addField('education_container', 'education')">Add Education</button>
+                </div>
+
+
+                <!-- Administrative Positions Section -->
+                <div class="form-section" id="admin_positions_container">
+                    <h4>Administrative Positions in College</h4>
+                    <div class="form-content">
+                        {% for item in staff.administrative_position %}
+                        <div class="form-group">
+                            <input type="text" name="admin_position_{{ loop.index }}" value="{{ item.position }}"
+                                placeholder="Position" class="form-control">
+                            <input type="number" name="admin_year1_{{ loop.index }}" value="{{ item.year_from }}"
+                                placeholder="Year (From)" class="form-control">
+                            <input type="number" name="admin_year2_{{ loop.index }}" value="{{ item.year_to }}"
+                                placeholder="Year (To)" class="form-control">
+                            <button type="button" class="btn btn-danger remove-btn"
+                                onclick="removeField(this)">Remove</button>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    <button type="button" class="btn btn-primary add-btn"
+                        onclick="addField('admin_positions_container', 'administrative_positions')">Add Administrative
+                        Position</button>
+                </div>
+
+
+                <!-- Honorary Positions Section -->
+                <div class="form-section" id="honorary_positions_container">
+                    <h4>Other Honorary Positions</h4>
+                    <div class="form-content">
+                        {% for item in staff.honorary_positions %}
+                        <div class="form-group">
+                            <input type="text" name="honorary_position_title_{{ loop.index }}"
+                                value="{{ item.position }}" placeholder="Position" class="form-control">
+                            <input type="number" name="honorary_position_year_{{ loop.index }}" value="{{ item.year }}"
+                                placeholder="Year" class="form-control">
+                            <button type="button" class="btn btn-danger remove-btn"
+                                onclick="removeField(this)">Remove</button>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    <button type="button" class="btn btn-primary add-btn"
+                        onclick="addField('honorary_positions_container', 'honorary_positions')">Add Honorary
+                        Position</button>
+                </div>
+
+
+                <!-- Conferences Attended Section -->
+                <div class="form-section" id="conferences_attended_container">
+                    <h4>Conferences Attended</h4>
+                    <div class="form-content">
+                        {% for item in staff.conferences %}
+                        <div class="form-group">
+                            <input type="month" name="conference_year_{{ loop.index }}" value="{{ item.year }}"
+                                placeholder="Date (Year and Month)" class="form-control">
+
+                            <select name="conference_type_{{ loop.index }}" class="form-control">
+                                <option value="Select">Select</option>
+                                <option value="National" {% if item.type=='National' %} selected {% endif %}>National
+                                </option>
+                                <option value="International" {% if item.type=='International' %} selected {% endif %}>
+                                    International</option>
+                            </select>
+                            <input type="text" name="title_of_paper_{{ loop.index }}" value="{{ item.title_of_paper }}"
+                                placeholder="Title of the Research Paper Presented" class="form-control">
+                            <input type="text" name="conference_details_{{ loop.index }}" value="{{ item.details }}"
+                                placeholder="Conference Details" class="form-control">
+                            <input type="text" name="conference_isbn_{{ loop.index }}" value="{{ item.isbn }}"
+                                placeholder="ISBN of Conference Proceedings" class="form-control">
+                            <button type="button" class="btn btn-danger remove-btn"
+                                onclick="removeField(this)">Remove</button>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    <button type="button" class="btn btn-primary add-btn"
+                        onclick="addField('conferences_attended_container', 'conferences_attended')">Add
+                        Conference</button>
+                </div>
+
+                <!-- Resource Person Section -->
+                <div class="form-section" id="resource_persons_container">
+                    <h4>Resource Person</h4>
+                    <div class="form-content">
+                        {% for item in staff.resource_person %}
+                        <div class="form-group">
+                            <input type="month" name="resource_person_date_{{ loop.index }}" value="{{ item.date }}"
+                                placeholder="Date (Year and Month)" class="form-control">
+                            <input type="text" name="resource_person_topic_{{ loop.index }}" value="{{ item.topic }}"
+                                placeholder="Topic of Lecture" class="form-control">
+                            <input type="text" name="resource_person_department_{{ loop.index }}"
+                                value="{{ item.department_ }}" placeholder="Name of Department/Institution"
+                                class="form-control">
+                            <button type="button" class="btn btn-danger remove-btn"
+                                onclick="removeField(this)">Remove</button>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    <button type="button" class="btn btn-primary add-btn"
+                        onclick="addField('resource_persons_container', 'resource_persons')">Add Resource
+                        Person</button>
+                </div>
+
+
+                <!-- Research IDs Section -->
+                <div class="form-section" id="research_ids_container">
+                    <h4>Research IDs</h4>
+                    <div class="form-content">
+                        {% for item in staff.research_ids %}
+                        <div class="form-group">
+                            <input type="text" name="research_ids_title_{{ loop.index }}" value="{{ item.title }}"
+                                placeholder="Title" class="form-control">
+                            <input type="url" name="research_ids_id_{{ loop.index }}" value="{{ item.id }}"
+                                placeholder="Link" class="form-control">
+                            <button type="button" class="btn btn-danger remove-btn"
+                                onclick="removeField(this)">Remove</button>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    <button type="button" class="btn btn-primary add-btn"
+                        onclick="addField('research_ids_container', 'research_ids')">Add Research ID</button>
+                </div>
+
+                <!-- Funding Section -->
+                <div class="form-section" id="fundingContainer">
+                    <h4>Government / Non-Government Funding for Research Projects</h4>
+                    <div class="form-content">
+                        {% for item in staff.funding %}
+                        <div class="form-group">
+                            <input type="text" name="funding_title_{{ loop.index }}" value="{{ item.project_title }}"
+                                placeholder="Title of the Project" class="form-control" required>
+                            <input type="text" name="funding_agency_{{ loop.index }}" value="{{ item.funding_agency }}"
+                                placeholder="Name of the Funding Agency" class="form-control mt-2" required>
+                            <input type="month" name="funding_year_{{ loop.index }}" value="{{ item.year }}"
+                                placeholder="Year" class="form-control mt-2" required>
+                            <input type="text" name="funding_amount_{{ loop.index }}" value="{{ item.amount }}"
+                                placeholder="Amount" class="form-control mt-2" required>
+
+                            <!-- Dropdown for funding status -->
+                            <select name="funding_status_{{ loop.index }}" class="form-control mt-2" required>
+                                <option value="" {% if item.status=="" %}selected{% endif %}>Select Status</option>
+                                <option value="completed" {% if item.status=="completed" %}selected{% endif %}>Completed
+                                </option>
+                                <option value="ongoing" {% if item.status=="ongoing" %}selected{% endif %}>Ongoing
+                                </option>
+                            </select>
+
+                            <button type="button" class="btn btn-danger remove-btn mt-2"
+                                onclick="removeField(this)">Remove</button>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    <button type="button" class="btn btn-primary add-btn"
+                        onclick="addField('fundingContainer', 'funding')">Add
+                        Funding</button>
+                </div>
+
+                <!-- Publications Section -->
+                <div class="form-section" id="publications_section">
+                    <h4>Research Publications</h4>
+                    <div class="form-content">
+                        {% for item in staff.publications %}
+                        <div class="form-group publication-item" data-index="{{ loop.index0 }}">
+                            <!-- Publication Date -->
+                            <input type="month" name="publications_date_{{ loop.index0 }}" class="form-control mt-2"
+                                value="{{ item.date }}" required>
+
+                            <!-- Publication Type Dropdown -->
+                            <select name="publications_type_{{ loop.index0 }}"
+                                class="form-control mt-2 publication-type" required>
+                                <option value="" selected>Select Publication Type</option>
+                                <option value="Journal article" {% if item.type=='Journal article' %}selected{% endif
+                                    %}>Journal article</option>
+                                <option value="Conference paper" {% if item.type=='Conference paper' %}selected{% endif
+                                    %}>Conference paper</option>
+                                <option value="Book chapter" {% if item.type=='Book chapter' %}selected{% endif %}>Book
+                                    chapter</option>
+                                <option value="Book" {% if item.type=='Book' %}selected{% endif %}>Book</option>
+                                <option value="Others" {% if item.type !='Journal article' and item.type
+                                    !='Conference paper' and item.type !='Book chapter' and item.type !='Book'
+                                    %}selected{% endif %}>Others</option>
+                            </select>
+
+                            <!-- Additional input field for "Others" -->
+                            <div class="form-group mt-2" id="other-publication-type-group_{{ loop.index0 }}"
+                                style="{% if item.type != 'Journal article' and item.type != 'Conference paper' and item.type != 'Book chapter' and item.type != 'Book' %}display: block;{% else %}display: none;{% endif %}">
+                                <input type="text" name="other_publications_type_{{ loop.index0 }}" class="form-control"
+                                    value="{% if item.type != 'Journal article' and item.type != 'Conference paper' and item.type != 'Book chapter' and item.type != 'Book' %}{{ item.type }}{% endif %}"
+                                    placeholder="Specify Publication Type">
+                            </div>
+
+                            <!-- Publication Title -->
+                            <input type="text" name="publications_title_{{ loop.index0 }}" value="{{ item.title }}"
+                                placeholder="Publication Title" class="form-control mt-2" required>
+
+                            <!-- Publication Link -->
+                            <input type="url" name="publications_link_{{ loop.index0 }}" value="{{ item.link }}"
+                                placeholder="Publication Link" class="form-control mt-2">
+
+                            <!-- Move and Remove buttons -->
+                            <button type="button" class="btn btn-danger move-up mt-2" onclick="moveField(this, -1)">Move
+                                Up</button>
+                            <button type="button" class="btn btn-danger move-down mt-2"
+                                onclick="moveField(this, 1)">Move Down</button>
+                            <button type="button" class="btn btn-danger remove-btn mt-2"
+                                onclick="removeField(this)">Remove</button>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    <button type="button" class="btn btn-primary add-btn"
+                        onclick="addField('publications_section', 'publications')">Add Publication</button>
+                </div>
+                <script>
+                    document.addEventListener('DOMContentLoaded', function () {
+                        // Get all publication type selects
+                        const publicationTypeSelects = document.querySelectorAll('.publication-type');
+
+                        publicationTypeSelects.forEach(function (dropdown) {
+                            // Get the index of the publication field
+                            const index = dropdown.closest('.publication-item').getAttribute('data-index');
+
+                            // Get the corresponding 'Other' input field
+                            const otherTypeGroup = document.getElementById(`other-publication-type-group_${index}`);
+                            const otherTypeInput = otherTypeGroup.querySelector('input');
+
+                            // Handle change event on the dropdown
+                            dropdown.addEventListener('change', function () {
+                                if (this.value === 'Others') {
+                                    otherTypeGroup.style.display = 'block';  // Show the 'Other' type input
+                                    otherTypeInput.required = true;  // Make it required
+                                } else {
+                                    otherTypeGroup.style.display = 'none';  // Hide the 'Other' type input
+                                    otherTypeInput.required = false;  // Remove the required attribute
+                                }
+                            });
+
+                            // Trigger the change event to ensure correct display on page load
+                            dropdown.dispatchEvent(new Event('change'));
+                        });
+                    });
+
+                </script>
+            </div>
+
+
+            <!-- Submit Button -->
+            <div class="form-group">
+                <br>
+                <button type="submit" class="submit" onclick="return validateForm();">UPDATE</button>
+            </div>
+
+        </form>
+    </div>
+</div>
+
+<!-- jQuery and Bootstrap JS for tooltips and dynamic content -->
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+
+
+<!-- Include JavaScript for Cropper.js and Bootstrap -->
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
+
+<script>
+    let cropper;
+    const profilePictureContainer = document.getElementById('profile-picture-container');
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const removeButton = document.getElementById('remove-profile-picture');
+        const fileInput = document.getElementById('profile_picture');
+        const cropImageElement = document.getElementById('crop-image');
+        const cropModal = new bootstrap.Modal(document.getElementById('cropModal'));
+
+        // If remove button exists
+        if (removeButton) {
+            removeButton.addEventListener('click', function () {
+                document.getElementById('remove_profile_picture').value = 'yes'; // Set hidden input to 'yes'
+                profilePictureContainer.innerHTML = ''; // Clear current picture and button
+                fileInput.disabled = false; // Enable the file input for uploading new picture
+                fileInput.value = ''; // Clear file input value
+            });
+        }
+
+        // Handle file input change for cropping
+        fileInput.addEventListener('change', function (event) {
+            const file = event.target.files[0];
+
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    cropImageElement.src = e.target.result;
+
+                    // Show the modal for cropping
+                    cropModal.show();
+
+                    // Ensure the Cropper.js is initialized after the modal is fully visible
+                    cropModal._element.addEventListener('shown.bs.modal', function () {
+                        // Initialize Cropper.js
+                        if (cropper) {
+                            cropper.destroy();
+                        }
+                        cropper = new Cropper(cropImageElement, {
+                            aspectRatio: 1, // Set to 1:1 for square crop
+                            viewMode: 1,
+                            autoCropArea: 1, // Ensure the cropped area takes full space
+                            scalable: true,
+                            zoomable: true,
+                            rotatable: true
+                        });
+                    });
+                }
+                reader.readAsDataURL(file);
+            }
+        });
+    });
+
+    // Crop and display the cropped image
+    function cropImage() {
+        const canvas = cropper.getCroppedCanvas({
+            width: 400, // Set the cropped width
+            height: 400, // Set the cropped height
+            imageSmoothingEnabled: true,
+            imageSmoothingQuality: 'high',
+        });
+
+        canvas.toBlob(function (blob) {
+            const file = new File([blob], 'cropped_image.png', {
+                type: 'image/png',
+                lastModified: Date.now()
+            });
+
+            // Create a new data transfer object and assign cropped image to file input
+            const dataTransfer = new DataTransfer();
+            dataTransfer.items.add(file);
+            document.getElementById('profile_picture').files = dataTransfer.files; // Add cropped image to file input
+
+            // Hide the modal
+            const cropModal = bootstrap.Modal.getInstance(document.getElementById('cropModal'));
+            cropModal.hide();
+
+            // Display the cropped image and "Remove" button
+            const newImg = document.createElement('img');
+            newImg.src = URL.createObjectURL(blob);
+            newImg.width = 100;
+
+            const newRemoveBtn = document.createElement('button');
+            newRemoveBtn.textContent = 'Remove';
+            newRemoveBtn.className = 'btn btn-danger';
+            newRemoveBtn.type = 'button';
+            newRemoveBtn.onclick = function () {
+                profilePictureContainer.innerHTML = '';
+                document.getElementById('profile_picture').disabled = false;
+                document.getElementById('profile_picture').value = '';
+            };
+
+            profilePictureContainer.innerHTML = '';
+            profilePictureContainer.appendChild(newImg);
+            profilePictureContainer.appendChild(newRemoveBtn);
+
+            // Ensure the file input is enabled after cropping so it can be sent to backend
+            document.getElementById('profile_picture').disabled = false;
+        });
+    }
+</script>
+
+<script>
+    // Function to add new fields dynamically
+    function addField(containerId, sectionType) {
+        var container = document.getElementById(containerId);
+        var index = container.getElementsByClassName('form-group').length + 1;
+        var div = document.createElement('div');
+        div.className = 'form-group';
+
+        if (sectionType === 'education') {
+            div.innerHTML = `
+                <input type="text" name="education_degree_${index}" placeholder="Degree" class="form-control" required>
+                <input type="text" name="education_college_${index}" placeholder="College" class="form-control" required>
+                <input type="number" name="education_duration_${index}" placeholder="Year of Completion" class="form-control" required>
+                <button type="button" class="btn btn-danger remove-btn" onclick="removeField(this)">Remove</button>
+            `;
+        } else if (sectionType === 'honorary_positions') {
+            div.innerHTML = `
+            <input type="text" name="honorary_position_title_${index}" placeholder="Position" class="form-control" required>
+            <input type="number" name="honorary_position_year_${index}" placeholder="Year" class="form-control" required>
+            <button type="button" class="btn btn-danger remove-btn" onclick="removeField(this)">Remove</button>
+        `;
+        } else if (sectionType === 'conferences_attended') {
+            div.innerHTML = `
+            <input type="month" name="conference_year_${index}" placeholder="Date (Year and Month)" class="form-control" value="2024-01" required>
+  
+            <select name="conference_type_${index}" class="form-control" required>
+                <option value="Select">Select</option>
+                <option value="National">National</option>
+                <option value="International">International</option>
+            </select>
+             <input type="text" name="title_of_paper_${index}" class="form-control " placeholder="Title of the Research Paper Presented" required>
+            <input type="text" name="conference_details_${index}" placeholder="Conference Details" class="form-control" required>
+            <input type="text" name="conference_isbn_${index}" placeholder="ISBN of Conference Proceedings" class="form-control" required>
+            <button type="button" class="btn btn-danger remove-btn" onclick="removeField(this)">Remove</button>
+        `;
+        } else if (sectionType === 'resource_persons') {
+            div.innerHTML = `
+            <input type="month" name="resource_person_date_${index}" placeholder="Date (Year and Month)" class="form-control" value="2024-01" required>
+            <input type="text" name="resource_person_topic_${index}" placeholder="Topic of Lecture" class="form-control" required>
+            <input type="text" name="resource_person_department_${index}" placeholder="Name of Department/Institution" class="form-control" required>
+            <button type="button" class="btn btn-danger remove-btn" onclick="removeField(this)">Remove</button>
+        `;
+        } else if (sectionType === 'administrative_positions') {
+            div.innerHTML = `
+                <input type="text" name="admin_position_${index}" placeholder="Position" class="form-control" required>
+                <input type="number" name="admin_year1_${index}" class="form-control " placeholder="Year (From)" required>
+            <input type="text" name="admin_year2_${index}" class="form-control" placeholder="Year (To) - type 'Current' if still in role" required>
+                <button type="button" class="btn btn-danger remove-btn" onclick="removeField(this)">Remove</button>
+            `;
+        } else if (sectionType === 'research_ids') {
+            div.innerHTML = `
+                <input type="text" name="research_ids_title_${index}" placeholder="Title" class="form-control" required>
+                <input type="url" name="research_ids_id_${index}" placeholder="Link" class="form-control">
+                <button type="button" class="btn btn-danger remove-btn" onclick="removeField(this)">Remove</button>
+            `;
+        } else if (sectionType === 'funding') {
+            div.innerHTML = `
+                <input type="text" name="funding_title_${index}" placeholder="Title of the Project" class="form-control" required>
+                <input type="text" name="funding_agency_${index}" placeholder="Name of the Funding Agency" class="form-control mt-2" required>
+                <input type="month" name="funding_year_${index}" placeholder="Year" class="form-control mt-2" value="2024-01" required>
+                <input type="number" name="funding_amount_${index}" placeholder="Amount" class="form-control mt-2" required>
+                <select name="funding_status_${index}" class="form-control mt-2" required>
+                    <option value="" selected>Select Status</option>
+                    <option value="completed">Completed</option>
+                    <option value="ongoing">Ongoing</option>
+                </select>
+                <button type="button" class="btn btn-danger remove-btn mt-2" onclick="removeField(this)">Remove</button>
+            `;
+        } 
+        
+        container.querySelector('.form-content').appendChild(div); // Append the new div to the container
+        
+            
+    }
+
+    // Function to remove a field
+    function removeField(button) {
+        button.closest('.form-group').remove();
+    }
+
+
+    
+</script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const publicationsSection = document.getElementById('publications_section');
+        const formContent = publicationsSection.querySelector('.form-content');
+        let publicationIndex = formContent.querySelectorAll('.publication-item').length;
+
+        // Function to add a new publication field
+        function addPublication() {
+            const newPublication = document.createElement('div');
+            newPublication.className = 'form-group publication-item';
+            newPublication.setAttribute('data-index', publicationIndex);
+
+            newPublication.innerHTML = `
+                <input type="month" name="publications_date_${publicationIndex}" class="form-control mt-2" value="2024-01" required>
+                <select name="publications_type_${publicationIndex}" class="form-control mt-2 publication-type" required>
+                    <option value="" selected>Select Publication Type</option>
+                    <option value="Journal article">Journal article</option>
+                    <option value="Conference paper">Conference paper</option>
+                    <option value="Book chapter">Book chapter</option>
+                    <option value="Book">Book</option>
+                    <option value="Others">Others</option>
+                </select>
+                <div class="form-group mt-2" id="other-publication-type-group_${publicationIndex}" style="display: none;">
+                    <input type="text" name="other_publications_type_${publicationIndex}" class="form-control" placeholder="Specify Publication Type">
+                </div>
+                <input type="text" name="publications_title_${publicationIndex}" placeholder="Publication Title" class="form-control mt-2" required>
+                <input type="url" name="publications_link_${publicationIndex}" placeholder="Publication Link" class="form-control mt-2">
+                <button type="button" class="btn btn-danger move-up mt-2" onclick="moveField(this, -1)">Move Up</button>
+                <button type="button" class="btn btn-danger move-down mt-2" onclick="moveField(this, 1)">Move Down</button>
+                <button type="button" class="btn btn-danger remove-btn mt-2" onclick="removeField(this)">Remove</button>
+            `;
+
+            formContent.appendChild(newPublication);
+
+            // Event for the publication type dropdown
+            const dropdown = newPublication.querySelector('.publication-type');
+            const otherTypeGroup = newPublication.querySelector(`#other-publication-type-group_${publicationIndex}`);
+            const otherTypeInput = otherTypeGroup.querySelector('input');
+
+            dropdown.addEventListener('change', function () {
+                if (this.value === 'Others') {
+                    otherTypeGroup.style.display = 'block';
+                    otherTypeInput.required = true;
+                } else {
+                    otherTypeGroup.style.display = 'none';
+                    otherTypeInput.required = false;
+                }
+            });
+
+            publicationIndex++;
+        }
+
+        // Attach the "Add Publication" function to the button
+        const addBtn = publicationsSection.querySelector('.add-btn');
+        addBtn.addEventListener('click', addPublication);
+    });
+
+    // Move field up or down
+    function moveField(btn, direction) {
+        const publicationItem = btn.closest('.publication-item');
+        const formContent = publicationItem.parentElement;
+
+        // Swap the order by moving the item in the DOM
+        if (direction === -1 && publicationItem.previousElementSibling) {
+            formContent.insertBefore(publicationItem, publicationItem.previousElementSibling);
+        } else if (direction === 1 && publicationItem.nextElementSibling) {
+            formContent.insertBefore(publicationItem.nextElementSibling, publicationItem);
+        }
+
+        // Update the data-index attributes to reflect the new order
+        updateIndexes();
+    }
+
+    // Remove a publication field
+    function removeField(btn) {
+        const publicationItem = btn.closest('.publication-item');
+        publicationItem.remove();
+
+        // After removal, update the indexes
+        updateIndexes();
+    }
+
+    // Update the data-index attributes after a change
+    function updateIndexes() {
+        const publicationItems = document.querySelectorAll('.publication-item');
+        publicationItems.forEach((item, index) => {
+            item.setAttribute('data-index', index);
+            // Also update the names of the inputs with the new index
+            item.querySelector('input[name^="publications_date_"]').name = `publications_date_${index}`;
+            item.querySelector('select[name^="publications_type_"]').name = `publications_type_${index}`;
+            item.querySelector('input[name^="publications_title_"]').name = `publications_title_${index}`;
+            item.querySelector('input[name^="publications_link_"]').name = `publications_link_${index}`;
+            item.querySelector('input[name^="other_publications_type_"]')?.setAttribute('name', `other_publications_type_${index}`);
+        });
+    }
+</script>
+
+
+
+
+
+
+<script>
+    function showNotification(message, type = 'error') {
+        const notification = document.getElementById('notification');
+        const notificationTitle = document.getElementById('notification-title');
+        const notificationIcon = document.getElementById('notification-icon');
+
+        // Reset classes before applying new ones
+        notification.className = 'notification hide'; // Reset class list to hide the notification first
+        notificationTitle.textContent = message;
+
+        // Clear any existing icon
+        notificationIcon.innerHTML = '';
+
+        // Insert the appropriate icon based on the type
+        if (type === 'success') {
+            notificationIcon.innerHTML = `
+            <span class="material-icons" style="color: #155724;">check_circle</span>`;
+        } else if (type === 'error') {
+            notificationIcon.innerHTML = `
+            <span class="material-icons" style="color: #721c24;">error</span>`;
+        }
+
+        // Add the type-specific class
+        notification.classList.add(type);
+
+        // Make the notification visible
+        notification.classList.remove('hide');
+        notification.classList.add('show');
+
+        setTimeout(() => {
+            // Start hiding the notification
+            notification.classList.remove('show');
+            notification.classList.add('hide');
+
+            setTimeout(() => {
+                notification.style.display = 'none'; // Hide the notification after animation
+            }, 500); // Delay to match the transition duration
+        }, 5000); // Hide after 5 seconds
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        // Parse flashed messages from Flask
+        const messages = JSON.parse('{{ get_flashed_messages(with_categories=True) | tojson | safe }}');
+
+        // Check if there are any messages to display
+        if (messages.length > 0) {
+            messages.forEach(msg => {
+                showNotification(msg[1], msg[0]); // Show each message with its type
+            });
+        } else {
+            const notification = document.getElementById('notification');
+            notification.style.display = 'none'; // Ensure hidden if no messages
+        }
+    });
+
+    // Handle close button click to manually hide notification
+    document.getElementById('notification-close').addEventListener('click', () => {
+        const notification = document.getElementById('notification');
+        notification.classList.remove('show');
+        notification.classList.add('hide');
+
+        setTimeout(() => {
+            notification.style.display = 'none'; // Hide the notification after animation
+        }, 500); // Delay to match the transition duration
+    });
+
+</script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const phdScholarsData = {{ staff['phd_scholars']| tojson
+    }};
+    const phdSection = document.querySelector('#phd-section');
+    const phdScholarsProduced = document.querySelector('#phd_scholars_produced').value;
+    const phdScholarsRegistered = document.querySelector('#phd_scholars_registered').value;
+
+    // Toggle visibility of the PhD section based on the selected radio button
+    document.querySelector('#supervisor-yes').addEventListener('change', function () {
+        phdSection.style.display = 'block'; // Show the PhD section
+    });
+
+    document.querySelector('#supervisor-no').addEventListener('change', function () {
+        phdSection.style.display = 'none'; // Hide the PhD section
+    });
+
+    // Prepopulate existing PhD scholars if any
+    function prepopulatePhDScholars(data) {
+        data.forEach((scholar, index) => {
+            const scholarHtml = generatePhDScholarFields(index, scholar.name, scholar.topic, scholar.status, scholar.years_of_completion);
+            phdSection.querySelector('#phd-scholars-section').insertAdjacentHTML('beforeend', scholarHtml);
+        });
+    }
+
+    // Generate the HTML for each PhD scholar input form
+    function generatePhDScholarFields(index, name = '', topic = '', status = '', years = '') {
+        return `
+            <div class="form-group">
+                <!-- Name and Topic in the first row -->
+                <div class="row">
+                    <div class="col-md-6">
+                        <input type="text" name="phd_name_${index}" class="form-control" placeholder="Name" value="${name}" required>
+                    </div>
+                    <div class="col-md-6">
+                        <input type="text" name="phd_topic_${index}" class="form-control" placeholder="Topic" value="${topic}" required>
+                    </div>
+                </div>
+
+                <!-- Status and Year of Completion in the second row -->
+                <div class="row mt-2">
+                    <div class="col-md-6">
+                        <select name="phd_status_${index}" class="form-control" required>
+                            <option value="" disabled selected>Select Status</option>
+                            <option value="completed" ${status === 'completed' ? 'selected' : ''}>Completed</option>
+                            <option value="ongoing" ${status === 'ongoing' ? 'selected' : ''}>Ongoing</option>
+                            <option value="thesis submitted" ${status === 'thesis submitted' ? 'selected' : ''}>Thesis Submitted</option>
+                            <option value="discontinued" ${status === 'discontinued' ? 'selected' : ''}>Discontinued</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <input type="text" name="phd_years_${index}" class="form-control" placeholder="Year of Completion" value="${years}">
+                    </div>
+                </div>
+
+                <!-- Remove button -->
+                <div class="row mt-2">
+                    <div class="col-md-12">
+                        <button type="button" class="btn btn-danger remove-btn">Remove</button>
+                    </div>
+                </div>
+            </div>
+        `;
+    }
+
+    // Event listener to handle dynamic addition of PhD Scholar fields
+    document.querySelector('#add-phd-scholar').addEventListener('click', function () {
+        let index = document.querySelectorAll('#phd-scholars-section .form-group').length;
+        const newField = generatePhDScholarFields(index);
+        phdSection.querySelector('#phd-scholars-section').insertAdjacentHTML('beforeend', newField);
+    });
+
+    // Handle removing a PhD scholar dynamically
+    document.addEventListener('click', function (e) {
+        if (e.target && e.target.classList.contains('remove-btn')) {
+            e.target.closest('.form-group').remove();
+        }
+    });
+
+    // Check if there are preexisting scholars to populate
+    if (phdScholarsData && phdScholarsData.length > 0) {
+        document.querySelector('#supervisor-yes').checked = true;
+        phdSection.style.display = 'block'; // Show the PhD section
+        prepopulatePhDScholars(phdScholarsData);
+    }
+
+    // Automatically show PhD section if scholars are produced or registered
+    if (phdScholarsProduced || phdScholarsRegistered) {
+        document.querySelector('#supervisor-yes').checked = true;
+        phdSection.style.display = 'block'; // Show the PhD section
+    }
+});
+
+</script>
+
+<script>
+    function updateCount(textareaId, countId, maxLength) {
+        const textarea = document.getElementById(textareaId);
+        const countDisplay = document.getElementById(countId);
+        const currentLength = textarea.value.length;
+
+        countDisplay.textContent = `${currentLength}/${maxLength}`;
+
+        // Show or hide error message based on length
+        const errorMessage = document.getElementById(textareaId === 'careerHighlights' ? 'careerError' : 'researchError');
+        if (currentLength > maxLength) {
+            errorMessage.style.display = 'block'; // Show error message
+        } else {
+            errorMessage.style.display = 'none'; // Hide error message
+        }
+    }
+
+    // Update character count on page load
+    window.onload = function () {
+        updateCount('careerHighlights', 'careerCount', 500); // Update count for Career Highlights
+        updateCount('researchCareer', 'researchCount', 500); // Update count for Research Career
+    }
+
+    function validateForm() {
+        const careerHighlights = document.getElementById('careerHighlights').value.length;
+        const researchCareer = document.getElementById('researchCareer').value.length;
+
+        if (careerHighlights > 500 || researchCareer > 500) {
+            alert("Please You have exceeded the maximum character limit of 500 characters. Please correct this before submitting.");
+            return false; // Prevent form submission
+        }
+
+        return true; // Allow form submission
+    }
+</script>
+
+
+
+{% endblock %}

@@ -1,0 +1,397 @@
+/* Dark Theme Variables */
+[data-bs-theme="dark"] {
+    --header-bg-color: #343a40;
+    --bg-color: #212529;
+    --header-text-color: #ffffff;
+    --footer-bg-color: #343a40;
+    --button-bg-color: #343a40;
+    --input-bg-color: #494949; /* Input background */
+    --input-border-color: #595959; /* Input border */
+    --input-text-color: #f1f1f1; /* Input text color */
+    --btn-hover-bg-color: #495057; /* Button hover background */
+    --card-bg-color: #444444; /* Card background */
+    --card-text-color: #f1f1f1; /* Card text color */
+}
+
+/* Light Theme Variables */
+[data-bs-theme="light"] {
+    --header-bg-color: #f8f9fa;
+    --header-text-color: #000000;
+    --footer-bg-color: #78091e;
+    --button-bg-color: #474747;
+    --input-bg-color: #f7f3f3; /* Input background */
+    --input-border-color: #ddd; /* Input border */
+    --input-text-color: #333; /* Input text color */
+    --btn-hover-bg-color: #600000; /* Button hover background */
+    --card-bg-color: #ffffff; /* Card background */
+    --card-text-color: #333333; /* Card text color */
+}
+
+
+/* Container and Layout */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.container1 {
+    width: 32cm; /* Fixed width for main container */
+    margin: auto;
+    padding: 1cm;
+    background: var(--card-bg-color);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 7px;
+    line-height: 2;
+    background-size: cover;
+    background-position: center;
+    font-size: 1.1rem;
+    font-family: 'Times New Roman', Times, serif;
+    margin-top: -320px;
+    overflow: hidden; /* Ensure the content does not overflow */
+    margin-bottom: 30px;
+}
+
+/* Header Styling */
+.custom-header {
+    display: flex;
+    flex-direction: row;
+    text-align: left;
+    margin-bottom: 20px;
+    align-items: center;
+    justify-content: space-between;
+    background-color: var(--header-bg-color); /* Use dark theme variable */
+    padding: 20px;
+}
+
+.custom-header h1 {
+    margin: 0;
+    font-size: 1.5rem;
+    margin-bottom: 15px;
+    font-weight: bold;
+    color: var(--header-text-color); /* Use dark theme variable */
+}
+
+.custom-header p {
+    margin-bottom: 2px;
+}
+
+.custom-header .contact-info {
+    flex: 1;
+    color: var(--header-text-color); /* Use dark theme variable */
+}
+
+.custom-header .profile-picture {
+    width: 150px;
+    height: 150px;
+    background-color: #ccc;
+    border-radius: 50%;
+    overflow: hidden;
+    margin-left: 20px;
+}
+
+.custom-header .profile-picture img {
+    width: 100%;
+    height: 100%;
+}
+
+/* Main Container */
+.main-container1 {
+    margin-left: 10px;
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.leftbar {
+    flex: 1 1 70%; /* Fixed 60% width for the left/main content */
+    max-width: 70%;
+    overflow: hidden; /* Prevent content overflow */
+}
+
+.sidebar {
+    flex: 0 0 29%; /* Fixed 35% width for the sidebar */
+    max-width: 35%;
+    background-color: #e2f3f9;
+    padding: 10px;
+    word-wrap: break-word; /* Wrap long text */
+    overflow: hidden; /* Prevent overflow from sidebar */
+    white-space: normal; /* Ensure long words wrap */
+    min-width: 200px; /* Ensure a minimum width for sidebar */
+}
+
+/* Sidebar Section Margin */
+.sidebar .section {
+    margin-left: 10px;
+}
+a, p {
+    word-break: break-all; /* This ensures long URLs or emails will break into multiple lines */
+    white-space: normal; /* Prevents text from stretching in one line */
+}
+
+/* Section Styling */
+.section h2 {
+    font-size: 1.3rem;
+    margin-top: 15px;
+    margin-bottom: 10px;
+    padding-bottom: 5px;
+    color: var(--header-text-color);
+}
+
+.section p {
+    margin: 0 0 10px 0;
+    padding-left: 15px;
+    text-indent: -8px;
+    color: var(--card-text-color);
+    font-size: 1rem;
+}
+
+.section a {
+    text-decoration: none;
+}
+
+.section a:hover {
+    text-decoration: underline;
+}
+
+.leftbar li {
+    font-size: 1rem;
+    margin-left: -10px;
+}
+
+.sidebar li {
+    font-size: 1rem;
+    margin-left: -10px;
+}
+
+/* Table and Cells Styling */
+table {
+    width: 100%; /* Full width of the container */
+    max-width: 100%; /* Prevents exceeding container width */
+    table-layout: fixed; /* Ensures consistent column widths */
+    font-size: 1rem;
+    border-collapse: separate; /* Ensures borders and spacing are separate */
+}
+
+/* Styling for table cells */
+td, th {
+    padding: 10px; /* Consistent padding around content */
+    overflow-wrap: break-word; /* Ensures long words wrap */
+    white-space: normal; /* Allows text to wrap normally */
+    vertical-align: middle; /* Centers the content vertically in the cell */
+    height: 60px; /* Set a fixed height for the cells */
+    box-sizing: border-box; /* Includes padding in height calculation */
+    line-height: 1.8; /* Adjust line height for better vertical spacing */
+    text-align: left; /* Align text to the left */
+}
+
+/* Styling specific to <th> */
+th {
+    font-weight: bold; /* Make headers bold */
+   
+    text-align: left; /* Ensure text is left-aligned */
+}
+
+/* Column-specific widths */
+td:first-child, th:first-child {
+    width: 20%; /* Set a specific width for the year column */
+}
+
+td:nth-child(2), th:nth-child(2) {
+    width: 20%; /* Set a specific width for the type column */
+}
+
+td:last-child, th:last-child {
+    width: 60%; /* Title column takes the remaining space */
+}
+
+/* Optional: Title styles */
+.publication-title {
+    color: var(--input-text-color); /* Use your defined variable */
+    text-decoration: none; /* Remove underline by default */
+}
+
+.publication-title:hover {
+    color: #0056b3; /* Change color on hover */
+    text-decoration: underline; /* Underline on hover */
+}
+
+/* Global styling for all icons */
+i {
+    font-weight: normal; /* Ensure icons are not bold */
+    font-size: 0.7em; /* Reduce icon size */
+   
+    color: inherit; /* Inherit color from parent */
+}
+
+
+/* Funding Title Column (50%) */
+.fund-title {
+    width: 35% !important; /* Force width of 50% */
+    text-align: left;
+   
+}
+
+/* Funding Agency Column (15%) */
+.fund-agency {
+    width: 25% !important; /* Force width of 15% */
+    text-align: left;
+   
+}
+
+/* Year and Amount Columns (17.5% each) */
+.fund-amount {
+    width: 20% !important; /* Force width of 17.5% for each */
+    text-align: left;
+    
+}
+
+/* Year and Amount Columns (17.5% each) */
+.fund-year {
+    width: 20% !important; /* Force width of 17.5% for each */
+    text-align: left;
+    
+}
+
+.conferences-year{
+    width: 20% !important; /* Force width of 17.5% for each */
+    text-align: left;
+}
+
+.conferences-type{
+    width: 80% !important; /* Force width of 17.5% for each */
+    text-align: left;
+}
+
+
+.resource_person-date{
+    width: 20% !important; /* Force width of 17.5% for each */
+    text-align: left;
+}
+
+.resource_person-topic{
+    width: 80% !important; /* Force width of 17.5% for each */
+    text-align: left;
+}
+
+
+
+
+.research-id-title {
+    color: var(--input-text-color);
+    text-decoration: none;
+}
+
+.research-id-title:hover {
+    color: #0056b3;
+    text-decoration: underline;
+}
+
+.no{
+    font-size: 1rem;
+}
+
+/* Responsive Design */
+@media screen and (max-width: 768px) {
+    .container1 {
+        width: 90%;
+        padding: 10px;
+        margin: 10px auto;
+        font-size: 0.6rem;
+        margin-top: -480px;
+    }
+
+    .custom-header {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        padding: 10px;
+        margin-bottom: 20px;
+    }
+
+    .custom-header h1 {
+        
+        font-size: 0.8rem;
+        color: var(--header-text-color);
+    }
+
+    .custom-header .profile-picture {
+        width: 80px;
+        height: 80px;
+        margin-right: 10px;
+    }
+
+    .contact-info {
+        text-align: left;
+        flex: 1;
+    }
+
+    .main-container1 {
+        display: flex;
+        flex-direction: column;
+        margin-left: 0;
+        gap: 0;
+    }
+
+    .sidebar {
+        flex: 1 0 auto;
+        max-width: 100%;
+        margin-bottom: 20px;
+    }
+
+    .leftbar {
+        flex: 1 0 auto;
+        margin-left: 20px;
+        max-width: 100%;
+        margin-right: 10px;
+    }
+
+    .section h2 {
+        font-size: 0.7rem;
+    }
+
+    .section p {
+        padding-left: 10px;
+        text-indent: -10px;
+        font-size: 0.6rem;
+    }
+
+    .leftbar li,
+    .sidebar li {
+        margin-left: -20px;
+        font-size: 0.6rem;
+    }
+
+    .notification {
+        padding: 8px 15px;
+        font-size: 12px;
+        max-width: 95%;
+    }
+
+    .notification__icon,
+    .notification__close {
+        font-size: 14px;
+    }
+
+    .notification__title {
+        font-size: 12px;
+    }
+    
+    table {
+        border-spacing: 5px; /* Reduce space between cells on mobile */
+        font-size: 0.6rem;
+        margin-top: -10px;
+        margin-bottom: 10px;
+        
+    }
+
+    td {
+        padding: 5px; /* Decrease padding for smaller screens */
+        height: 60px; /* Maintain fixed height for cells on mobile */
+        box-sizing: border-box; /* Ensure padding is within height */
+    }
+    .no{
+        font-size: 0.6rem;
+    }
+}

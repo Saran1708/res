@@ -1,0 +1,416 @@
+/* Basic styles */
+body {
+    font-family: "Times New Roman", serif;
+    margin: 0;
+    padding: 0;
+    
+}
+
+/* Header styles */
+header {
+    background-color: var(--header-bg-color);
+    color: var(--header-text-color);
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+}
+
+.header-container {
+    padding: 6px 0; /* Adjust the padding as needed */
+}
+
+/* Ensure content below the header and banner is displayed properly */
+main {
+    margin-top: 350px; /* Adjust this value based on the actual height of your header and banner */
+}
+
+@media (max-width: 768px) {
+    main {
+        margin-top: 500px; /* Adjust according to header and banner height on smaller screens */
+    }
+}
+
+/* Header text styles */
+header .college-title,
+header .college-details,
+header .header-title {
+    text-align: center;
+    color: #ffffff;
+}
+
+header .college-title {
+    margin-bottom: 20px;
+    margin-top: 0.5rem;
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+header .college-details {
+    margin-top: 0.5rem;
+    font-size: 1.15rem;
+    font-weight: 400;
+}
+
+header .header-title {
+    font-size: 1rem;
+    font-weight: bold;
+    margin-top: 0.5rem;
+}
+
+/* Footer styles */
+footer {
+    position: relative; /* Keeps the footer at the bottom of the content */
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: var(--footer-bg-color);
+    text-align: center;
+    color: #ffffff;
+    padding: 0.5rem 0;
+    z-index: 1000;
+}
+
+footer p {
+    margin: 0;
+    margin-top: 10px;
+    font-size: 1.2rem;
+ 
+}
+
+/* Theme specific styles */
+[data-bs-theme="dark"] {
+    --header-bg1-color: #343a40;
+    --header-text-color: #ffffff;
+    --footer-bg1-color: #343a40;
+    --icon-color: #ffffff; /* White for better contrast on dark background */
+}
+
+[data-bs-theme="light"] {
+    --header-bg1-color: #1c1b3b;/*   #78091*/
+    --header-text-color: #000000;
+    --footer-bg1-color: #1e1e1e;/*   #78091e*/
+    --icon-color: #ffffff; /* Dark gray for light background */
+    
+}
+
+.text-dark-mode {
+    color: var(--header-text-color);
+}
+
+.text-light-mode {
+    color: var(--header-text-color);
+}
+
+.form-control-dark {
+    border-color: var(--bs-gray);
+}
+
+.form-control-dark:focus {
+    border-color: #fff;
+    box-shadow: 0 0 0 0.25rem rgba(255, 255, 255, 0.25);
+}
+
+.text-small {
+    font-size: 85%;
+}
+
+img {
+    width: 90px;
+    height: auto;
+}
+
+
+
+/* Banner Section */
+.banner {
+    position: relative;
+    width: 100%; /* Ensure it covers the full width */
+}
+
+.banner-img {
+    width: 100%; /* Ensure the image covers the full width of the banner */
+    height: auto; /* Maintain aspect ratio */
+    margin-top: 130px; /* Adjust margin if necessary */
+}
+
+/* Style for the text overlay */
+.banner-text {
+    position: absolute;
+    top: 70%; /* Center vertically */
+    left: 12%;
+    transform: translateY(-50%); /* Center text vertically */
+    color: #ffffff; /* White text for contrast */
+    font-size: 3rem; /* Adjust font size as needed */
+    font-weight: bold; /* Make the text bold */
+    text-align: center; /* Center the text */
+    padding: 10px; /* Add some padding if needed */
+    
+    border-radius: 5px; /* Optional: rounded corners for the background */
+    
+}
+
+
+
+.login-img {
+    font-size: 40px;
+    color: var(--icon-color); /* Dynamic color based on theme */
+    vertical-align: middle;
+    border-radius: 50%;
+}
+
+.dropdown-toggle::after {
+    color: #ffffff;
+}
+
+.background-color {
+    background-color: var(--header-bg1-color);
+}
+.background-color2 {
+    background-color: var(--footer-bg1-color);
+}
+
+
+
+/* Responsive adjustments */
+@media (max-width: 767px) {
+    .header-content {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .header-logo {
+        flex: 0 0 15%;
+        margin-right: 5px;
+        max-width: 70px;
+        margin-left: 10rem;
+    }
+
+    .head {
+        flex: 1 1 auto;
+        text-align: center;
+        overflow: hidden;
+        white-space: normal;
+        margin: 0 5px;
+    }
+
+    .profile-container {
+        flex: 0 0 auto;
+        margin-left: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: auto;
+    }
+
+    .head .college-title {
+        font-size: 0.8rem;
+        margin-top: 10px;
+    }
+
+    .head .college-details {
+        font-size: 0.7rem;
+        margin-bottom: 10px;
+    }
+
+    .login-img {
+        font-size: 20px;
+    }
+
+    .dropdown {
+        margin-bottom: 10px;
+        font-size: 13px;
+    }
+
+    .dropdown-submenu .dropdown-menu {
+        font-size: 13px;
+        position: static;
+        margin-top: 0;
+        margin-left: 0;
+        display: none;
+    }
+
+    .dropdown-submenu.show .dropdown-menu {
+        display: block;
+    }
+
+    footer {
+        font-size: 0.7rem;
+    }
+
+    footer p {
+        font-size: 0.8rem;
+    }
+
+    header .header-title {
+        font-size: 0.6rem;
+        font-weight: bold;
+        margin-top: -0.8rem;
+        margin-bottom: -1.4rem;
+    }
+}
+
+
+/* Add this CSS to your existing stylesheet or a <style> block */
+/* Ensure the submenu is positioned relative to its parent */
+.dropdown-submenu {
+    position: relative;
+  }
+  
+  .dropdown-submenu .dropdown-menu {
+    top: 100%; /* Positions the submenu right below the parent item */
+    left: 0; /* Aligns the submenu with the left edge of the parent */
+    margin-top: 0; /* Adjust as needed */
+    display: none; /* Hide the submenu by default */
+  }
+  
+  .dropdown-submenu:hover .dropdown-menu {
+    display: block; /* Show the submenu on hover */
+  }
+  .header-logo {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+  
+
+/* Add this CSS to your existing stylesheet or a <style> block */
+
+/* Background color for dropdown items on hover */
+.dropdown-menu .dropdown-item:hover {
+    background-color: #c9c9c9; /* Light background color for hover effect */
+}
+
+/* Optional: Add different color for dropdown items on hover in dark mode */
+[data-bs-theme="dark"] .dropdown-menu .dropdown-item:hover {
+    background-color: #707375; /* Dark background color for hover effect in dark mode */
+}
+
+@media (max-width: 767px) {
+    .header-content {
+        display: flex;
+        flex-wrap: wrap; /* Allow items to wrap to the next line if needed */
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+        box-sizing: border-box;
+    }
+    
+    .header-logo {
+       
+        margin-right: auto; /* Center horizontally */
+        display: block;     /* Ensure it's treated as a block element */
+        text-align: center; /* Center any text inside (if necessary) */
+    }
+    
+    .head {
+        flex: 1 1 auto; /* Allow title and details to take up the remaining space */
+        text-align: center;
+        overflow: hidden;
+        white-space: normal; /* Allow text to wrap */
+        margin: 0 5px;
+    }
+    
+    .profile-container {
+        flex: 0 0 auto;
+        margin-left: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: auto; /* Allow it to size naturally */
+    }
+
+    .head .college-title {
+        font-size: 0.8rem; /* Ensure readability on mobile */
+        margin-top: 10px;
+    }
+
+    .head .college-details {
+        font-size: 0.7rem; /* Slightly smaller for details */
+        margin-bottom: 10px;
+    }
+    
+    .login-img {
+        
+    
+       
+        font-size: 20px;          
+  
+    }
+    
+    .dropdown {
+        margin-bottom: 10px;
+        font-size: 13px;
+    }
+
+   
+
+    .dropdown-submenu .dropdown-menu {
+        font-size: 13px;
+        position: static;
+        margin-top: 0;
+        margin-left: 0;
+        display: none;
+    }
+
+    /* Show sub-dropdown on click */
+    .dropdown-submenu.show .dropdown-menu {
+        display: block;
+    }
+    /* Footer styles */
+footer {
+    position: relative; /* Keeps the footer at the bottom of the content */
+    font-size: 0.7rem;
+}
+    
+footer p {
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    font-size: 0.8rem;
+}
+header .header-title {
+    font-size: 0.6rem;
+    font-weight: bold;
+    margin-top: -0.8rem;
+    margin-bottom: -1.4rem;
+}
+
+.banner-text {
+    position: absolute;
+    top: 75%; /* Center vertically */
+    left:2%;
+    transform: translateY(-50%); /* Center text vertically */
+    color: #ffffff; /* White text for contrast */
+    font-size: 2rem; /* Adjust font size as needed */
+    font-weight: bold; /* Make the text bold */
+    text-align: left; /* Center the text */
+    padding: 10px; /* Add some padding if needed */
+
+    
+}
+
+.banner-img {
+    width: 100%;   /* Ensure the image covers the full width of the banner */
+    height: auto;  /* Maintain aspect ratio, allowing height to adjust based on width */
+    max-height: 200px; /* Set a maximum height to reduce the image's height */
+    object-fit: cover; /* Ensures the image covers the area while cropping if necessary */
+}
+
+
+
+
+
+}
+
+@media (min-width: 1600px) {
+    .banner-text {
+        
+        left: 19%;
+       
+    }
+}

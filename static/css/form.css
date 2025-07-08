@@ -1,0 +1,462 @@
+.notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    display: flex;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: #f8d7da; /* Default background color for error */
+    color: #721c24; /* Default text color for error */
+    border-radius: 5px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
+    transform: translateY(-10px);
+    z-index: 9999; /* Ensure it's above most other elements */
+}
+
+
+.notification.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.notification.hide {
+    opacity: 0;
+    transform: translateY(-10px);
+}
+
+/* Icon and Title Styles */
+.notification__icon {
+    margin-right: 10px; /* Space between icon and text */
+}
+
+.notification__title {
+    flex: 1; /* Allow title to take up remaining space */
+}
+
+/* Close Button Style */
+.notification__close {
+    margin-left: 20px; /* Space between text and close button */
+    cursor: pointer;
+}
+
+/* Success Notification Styles */
+.notification.success {
+    background-color: #d4edda; /* Light green background */
+    color: #155724; /* Dark green text color */
+}
+
+.notification.success .notification__icon {
+    color: #155724; /* Dark green icon color */
+}
+
+.notification.success .notification__title {
+    color: #155724; /* Dark green text color */
+}
+
+.notification.success .notification__close {
+    color: #155724; /* Dark green close button color */
+}
+
+/* Error Notification Styles */
+.notification.error {
+    background-color: #f8d7da; /* Light red background */
+    color: #721c24; /* Dark red text color */
+}
+
+.notification.error .notification__icon {
+    color: #721c24; /* Dark red icon color */
+}
+
+.notification.error .notification__title {
+    color: #721c24; /* Dark red text color */
+}
+
+.notification.error .notification__close {
+    color: #721c24; /* Dark red close button color */
+}
+
+/* Google Material Icons (assuming use for close button) */
+.material-icons {
+    font-family: 'Material Icons';
+    font-size: 20px;
+}
+
+
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* Dark Theme Variables */
+[data-bs-theme="dark"] {
+    --header-bg-color: #343a40;
+    --bg-color: #212529;
+    --header-text-color: #ffffff;
+    --footer-bg-color: #343a40;
+    --button-bg-color: #717171;
+    --input-bg-color: #494949;
+    --input-border-color: #595959;
+    --input-text-color: #f1f1f1;
+    --btn-hover-bg-color: #b0acac;
+    --card-bg-color: #434141;
+    --card-text-color: #f1f1f1;
+    --picture-bg-color: #343a40;
+    --submit-btn-color: #717171;
+    --submit-btn-hover-color: #b0acac;
+}
+
+/* Light Theme Variables */
+[data-bs-theme="light"] {
+    --header-bg-color: #f8f9fa;
+    --header-text-color: #000000;
+    --footer-bg-color: #78091e;
+    --button-bg-color: #78091e;
+    --input-bg-color: #f7f3f3;
+    --input-border-color: #ddd;
+    --input-text-color: #333;
+    --btn-hover-bg-color: #c15757;
+    --card-bg-color: #ffffff;
+    --card-text-color: #000000;
+    --picture-bg-color: #3e3e3e;
+    --submit-btn-color: #686868;
+    --submit-btn-hover-color: #353535;
+}
+
+/* Content styling for the form container */
+.content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: calc(100vh - 150px); /* Adjust for header/footer */
+    background: var(--bg-color);
+    padding: 30px 20px;
+}
+
+.login-container {
+    background: var(--card-bg-color);
+    color: var(--card-text-color);
+    border-radius: 4px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    padding: 30px;
+    width: 100%;
+    max-width: 800px;
+    text-align: center;
+    margin-top: -340px;
+}
+
+/* Form Styling */
+.login-form {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.login-form input {
+    height: 50px;
+    border-radius: 5px;
+    background: var(--input-bg-color);
+    margin-bottom: 15px;
+    border: 1px solid var(--input-border-color);
+    padding: 0 15px;
+    font-size: 14px;
+    color: var(--input-text-color);
+}
+
+.btn-custom {
+    width: 100%;
+    height: 50px;
+    font-size: 14px;
+    color: white;
+    background: var(--button-bg-color);
+    border-radius: 5px;
+    border: none;
+    font-weight: 500;
+    text-transform: uppercase;
+    cursor: pointer;
+}
+
+.btn-custom:hover {
+    background: var(--btn-hover-bg-color);
+    transform: scale(1.01);
+    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2);
+}
+
+.login-container h4 {
+    margin-bottom: 10px;
+    font-size: 1em;
+    font-weight: bold;
+    margin-bottom: 25px;
+}
+
+/* Form Element Styling */
+.form-section {
+    margin-bottom: 20px;
+}
+
+.form-section h4 {
+    margin-bottom: 10px;
+    font-size: 1em;
+    font-weight: bold;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-control {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid var(--input-border-color);
+    border-radius: 5px;
+    font-size: 0.9rem;
+    background: var(--input-bg-color);
+    color: var(--input-text-color);
+}
+
+.btn {
+    display: inline-block;
+    padding: 10px 20px; /* Reduced padding */
+    font-size: 12px; /* Smaller font size */
+    font-weight: bold;
+    border-radius: 5px;
+    background-color: var(--picture-bg-color);
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    text-transform: uppercase;
+    width: 300px;
+}
+
+.btn-primary {
+    display: inline-block;
+    padding: 10px 20px; /* Reduced padding */
+    font-size: 12px; /* Smaller font size */
+    font-weight: bold;
+    border-radius: 5px;
+    background-color: var(--picture-bg-color);
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    text-transform: uppercase;
+    width: 300px;
+}
+
+.btn-secondary {
+    display: inline-block;
+    padding: 10px 20px; /* Reduced padding */
+    font-size: 12px; /* Smaller font size */
+    font-weight: bold;
+    border-radius: 5px;
+    background-color: var(--button-bg-color);
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    text-transform: uppercase;
+    width: 300px;
+}
+
+.remove-item {
+    height: 40px; /* Ensure consistent button height */
+    padding: 0 15px;
+    font-size: 14px;
+    background-color: var(--picture-bg-color);
+    border: none;
+    border-radius: 4px;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-left: -30PX;
+}
+
+.btn:hover {
+    background-color: var(--btn-hover-bg-color);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transform: translateY(-2px);
+}
+
+textarea.form-control {
+    resize: vertical;
+}
+
+/* Dynamic Sections */
+.dynamic-section {
+    margin-bottom: 20px;
+}
+
+.dynamic-section .form-control {
+    margin-bottom: 10px;
+}
+
+.dynamic-section button {
+    margin-left: 3px;
+}
+
+/* Tooltip */
+.tooltip {
+    position: absolute;
+    background-color: #333;
+    color: #fff;
+    padding: 8px;
+    border-radius: 4px;
+    font-size: 14px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    z-index: 1000;
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+    max-width: 200px; /* Prevent large tooltips from overflowing */
+    white-space: normal; /* Allow text to wrap */
+}
+
+.tooltip.show {
+    opacity: 1;
+}
+
+.tooltip {
+    overflow-wrap: break-word;
+}
+
+.tooltip-top .tooltip-arrow {
+    bottom: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px 5px 0 5px;
+    border-color: #333 transparent transparent transparent;
+}
+
+.tooltip-bottom .tooltip-arrow {
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 0 5px 5px 5px;
+    border-color: transparent transparent #333 transparent;
+}
+
+.tooltip-left .tooltip-arrow {
+    top: 50%;
+    right: 100%;
+    margin-top: -5px;
+    border-width: 5px 5px 5px 0;
+    border-color: transparent #333 transparent transparent;
+}
+
+.tooltip-right .tooltip-arrow {
+    top: 50%;
+    left: 100%;
+    margin-top: -5px;
+    border-width: 5px 0 5px 5px;
+    border-color: transparent transparent transparent #333;
+}
+
+/* Dynamic Section Styling */
+.dynamic-section {
+    margin-bottom: 20px;
+}
+
+.dynamic-section .form-control {
+    margin-bottom: 10px;
+}
+
+/* .add-btn styling */
+.add-btn {
+    display: inline-block;
+    padding: 10px 20px; /* Reduced padding */
+    font-size: 12px; /* Smaller font size */
+    font-weight: bold;
+    border-radius: 5px;
+    background-color: var(--button-bg-color);
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    text-transform: uppercase;
+    width: 300px;
+}
+
+.add-btn:hover {
+    background-color: var(--btn-hover-bg-color);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transform: translateY(-2px);
+}
+
+/* Responsive Styling */
+/* Responsive Styling */
+@media screen and (max-width: 768px) {
+    .container {
+        width: 100%;
+        margin: 0 auto;
+        padding: 0 10px;
+    }
+
+    .login-container {
+        padding: 20px;
+        max-width: 100%;
+        margin-top: -500PX;
+    }
+
+    .login-form input,
+    .form-control {
+        height: 40px; /* Reduced height */
+        font-size: 10px; /* Reduced font size */
+        padding: 0 10px; /* Reduced padding */
+    }
+    
+    .btn-custom {
+        height: 40px; /* Reduced height */
+        font-size: 11px; /* Reduced font size */
+    }
+
+    .login-container h4,
+    .form-section h4 {
+        font-size: 0.7em; /* Reduced heading font size */
+    }
+
+    .btn,
+    .btn-primary,
+    .btn-secondary,
+    .add-btn {
+        padding: 8px 15px; /* Further reduced padding */
+        font-size: 10px; /* Smaller font size */
+        width: 50%; /* Make buttons full width */
+    }
+
+    .remove-item {
+        height: 35px; /* Reduced height */
+        font-size: 12px; /* Reduced font size */
+        padding: 0 10px; /* Reduced padding */
+    }
+
+    .tooltip {
+        font-size: 12px; /* Reduced tooltip font size */
+        padding: 6px; /* Reduced tooltip padding */
+    }
+    .notification {
+        padding: 8px 15px; /* Reduce padding */
+        font-size: 12px; /* Smaller font size */
+        max-width: 95%; /* Increase width on smaller screens */
+    }
+
+    .notification__icon,
+    .notification__close {
+        font-size: 14px; /* Smaller icon and close button size */
+    }
+
+    .notification__title {
+        font-size: 12px; /* Smaller title font size */
+    }
+    
+}
+
+
+
+
+
+
+    
