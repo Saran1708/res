@@ -13,6 +13,8 @@ from io import BytesIO
 from datetime import datetime, timedelta
 import pdfkit
 from dotenv import load_dotenv
+import logging
+import traceback
 
 
 
@@ -22,6 +24,24 @@ application=app
 app.secret_key = 'abdkfnsldladhlaihdkbck13445644t'  # Replace with a secure key
 
 app.config['UPLOAD_FOLDER'] = os.path.join('static', 'uploads')
+
+# ---------------------------
+# 🔧 Set up logging
+# ---------------------------
+log_dir = os.path.join(os.getcwd(), 'logs')
+os.makedirs(log_dir, exist_ok=True)
+
+log_file_path = os.path.join(log_dir, 'app_errors.log')
+
+logging.basicConfig(
+    level=logging.DEBUG,
+    format='%(asctime)s [%(levelname)s] %(message)s',
+    handlers=[
+        logging.FileHandler(log_file_path),
+        logging.StreamHandler()  # Optional: keep console logs
+    ]
+)
+
 
 
 
@@ -125,6 +145,9 @@ def view_details(id):
             return redirect(url_for('dashboard'))
     except Exception as e:
         print(f"Error fetching data: {e}")
+        error_msg = f"🔥 EXCEPTION: {str(e)}"
+        logging.error(error_msg)
+        logging.error(traceback.format_exc())  # Full traceback
         flash('An error occurred while fetching data from the database.', 'danger')
         return redirect(url_for('dashboard'))
 
@@ -817,7 +840,9 @@ def submit_form():
             flash('Form submitted successfully!', 'success')
             return redirect(url_for('profile'))  # Redirect after successful POST
         except Exception as e:
-            print(f"Error: {e}")
+            error_msg = f"🔥 EXCEPTION: {str(e)}"
+            logging.error(error_msg)
+            logging.error(traceback.format_exc())  # Full traceback
             flash('An error occurred while submitting the form. Please try again.', 'error')
             return redirect(url_for('profile'))
 
@@ -878,6 +903,9 @@ def profile():
 
     except Error as e:
         print(f"Error: {e}")
+        error_msg = f"🔥 EXCEPTION: {str(e)}"
+        logging.error(error_msg)
+        logging.error(traceback.format_exc())  # Full traceback
         abort(500, description="An error occurred while retrieving user data.")
 
 
@@ -971,6 +999,9 @@ def dashboard():
 
     except Error as e:
         print(f"Database error: {e}")
+        error_msg = f"🔥 EXCEPTION: {str(e)}"
+        logging.error(error_msg)
+        logging.error(traceback.format_exc())  # Full traceback
         flash('An error occurred while processing your request.', 'danger')
 
     if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
