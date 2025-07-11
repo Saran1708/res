@@ -21,7 +21,8 @@ app = Flask(__name__)
 application=app
 app.secret_key = 'abdkfnsldladhlaihdkbck13445644t'  # Replace with a secure key
 
-app.config['UPLOAD_FOLDER'] = r'C:\Users\saran\OneDrive\Desktop\Main - Mcc\static\uploads'
+app.config['UPLOAD_FOLDER'] = os.path.join('static', 'uploads')
+
 
 
 load_dotenv()  # Load variables from .env
